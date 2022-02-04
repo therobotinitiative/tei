@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Login to TEI</title>
+</head>
+<body>
+<span th:text="${unauth}">&nbsp;</span>
+	<form action="/login" method="POST">
+		Login to TEI:<br>
+		<input type="hidden" name="token" th:value="${token}">
+		User: <input type="text" name="user"><br>
+		Password: <input type="password" name="password"><br>
+		<input type="submit" value="Login">
+	</form>
+</body>
+</html>
