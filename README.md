@@ -1,6 +1,6 @@
 # README #
 
-This README would normally document whatever steps are necessary to get your application up and running.
+TEI - "Tilastoista Enemman Iloa"
 
 ### What is this repository for? ###
 
@@ -10,12 +10,10 @@ This README would normally document whatever steps are necessary to get your app
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Install MongoDB
+* Start application with spring.data.mongodb.database=database name
+* Go to <application address>/initialize to set up user "admin" password
+* Login and explore
 
 ### Contribution guidelines ###
 

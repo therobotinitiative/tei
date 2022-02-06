@@ -3,7 +3,7 @@ package com.orbital3d.server.tei.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.orbital3d.server.tei.database.entity.User;
+import com.orbital3d.server.tei.database.document.User;
 import com.orbital3d.server.tei.database.repository.UserRepository;
 import com.orbital3d.server.tei.service.UserService;
 
@@ -16,7 +16,7 @@ import com.orbital3d.server.tei.service.UserService;
 @Service
 public class UserServiceImpl implements UserService
 {
-	@Autowired
+	@Autowired(required = true)
 	private UserRepository userRepository;
 
 	@Override
@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService
 	}
 
 	@Override
-	public User finfUser(String userName)
+	public User findUser(String userName)
 	{
 		return getRepository().findByUserName(userName);
 	}

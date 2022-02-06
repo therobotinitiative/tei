@@ -1,26 +1,28 @@
-package com.orbital3d.server.tei.database.entity;
+package com.orbital3d.server.tei.database.document;
 
 import java.math.BigInteger;
 
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import com.orbital3d.server.tei.type.DomainObject;
 
+@Document(collection = "user")
 public class User implements DomainObject
 {
-	@Id
+	@MongoId
 	private BigInteger id;
 
 	private String userName;
-	private char[] password;
-	private char[] salt;
+	private byte[] password;
+	private byte[] salt;
 
 	public User()
 	{
 		// Default
 	}
 
-	public User(BigInteger id, String userName, char[] password, char[] salt)
+	public User(BigInteger id, String userName, byte[] password, byte[] salt)
 	{
 		this.id = id;
 		this.userName = userName;
@@ -48,22 +50,22 @@ public class User implements DomainObject
 		this.userName = userName;
 	}
 
-	public char[] getPassword()
+	public byte[] getPassword()
 	{
 		return password;
 	}
 
-	public void setPassword(char[] password)
+	public void setPassword(byte[] password)
 	{
 		this.password = password;
 	}
 
-	public char[] getSalt()
+	public byte[] getSalt()
 	{
 		return salt;
 	}
 
-	public void setSalt(char[] salt)
+	public void setSalt(byte[] salt)
 	{
 		this.salt = salt;
 	}
@@ -71,6 +73,6 @@ public class User implements DomainObject
 	@Override
 	public String toString()
 	{
-		return String.format("Customer[id=%s, userName='%s']", id, userName);
+		return String.format("User[id=%s, userName='%s']", id, userName);
 	}
 }

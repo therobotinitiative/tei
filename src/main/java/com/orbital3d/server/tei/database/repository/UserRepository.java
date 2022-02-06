@@ -4,7 +4,7 @@ import java.math.BigInteger;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import com.orbital3d.server.tei.database.entity.User;
+import com.orbital3d.server.tei.database.document.User;
 
 /**
  * User repository actions extending the basic CRUD actions.

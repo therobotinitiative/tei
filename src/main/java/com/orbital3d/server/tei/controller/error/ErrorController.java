@@ -1,4 +1,4 @@
-package com.orbital3d.server.tei.controller;
+package com.orbital3d.server.tei.controller.error;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

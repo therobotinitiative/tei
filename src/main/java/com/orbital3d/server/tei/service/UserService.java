@@ -1,6 +1,6 @@
 package com.orbital3d.server.tei.service;
 
-import com.orbital3d.server.tei.database.entity.User;
+import com.orbital3d.server.tei.database.document.User;
 import com.orbital3d.server.tei.database.repository.UserRepository;
 
 /**
@@ -17,5 +17,5 @@ public interface UserService extends CrudService<User, UserRepository>
 	 * @param userName User name
 	 * @return {@link User} object
 	 */
-	User finfUser(String userName);
+	User findUser(String userName);
 }
