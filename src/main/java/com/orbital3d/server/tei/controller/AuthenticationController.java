@@ -88,7 +88,7 @@ public class AuthenticationController
 				request.getSession(false).setAttribute("auth", authToken);
 
 				LOG.info("{} user logged in with token {}", user.getUserName(), token);
-				return "redirect:/tei";
+				return "redirect:/tei#!/dashboard";
 			}
 		}
 		throw new AuthenticationFailedExcetion();
