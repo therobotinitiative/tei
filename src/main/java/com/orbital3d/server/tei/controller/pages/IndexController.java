@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.orbital3d.server.tei.i18n.LocalisationKeys;
+
 /**
  * Index page controller.
  * 
@@ -23,14 +25,14 @@ public class IndexController
 	@GetMapping("/tei")
 	public String index(Model model)
 	{
-		Map<String, String> menu = new LinkedHashMap<>();
+		Map<String, LocalisationKeys> menu = new LinkedHashMap<>();
 
-		menu.put("#!/dashboard", "Dashboard");
-		menu.put("#!/view", "View");
-		menu.put("#!/send", "Send");
-		menu.put("#!/template", "Template");
+		menu.put("#!/dashboard", LocalisationKeys.DASHBOARD);
+		menu.put("#!/view", LocalisationKeys.VIEW);
+		menu.put("#!/send", LocalisationKeys.SEND);
+		menu.put("#!/template", LocalisationKeys.TEMPLATE);
 		// TODO : Check if the user is administrator then show "admin" menu item
-		menu.put("/logout", "Logout");
+		menu.put("/logout", LocalisationKeys.LOGOUT);
 
 		model.addAttribute("menuItems", menu);
 		return "pages/index";

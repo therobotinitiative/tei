@@ -78,19 +78,18 @@ footer {
 
 <div ng-controller="abc">
 	<header>
-	  <h2>Welcome [[${user}]]</h2>
+	  <h2>[[#{WELCOME}]] [[${user}]]</h2>
 	</header>
 	
 	<section>
 	  <nav>
 	    <ul th:each="element : ${menuItems}">
-	    	<li><a href="" th:href="${element.key}" th:text="${element.value}">Link</a></li>
+	    	<li><a href="" th:href="${element.key}" th:text="#{${element.value}}">Link</a></li>
 	    </ul>
 	  </nav>
 	  
 	  <article ng-view>
 		  	<!-- View area -->
-		  	{{test}}
 	  </article>
 	</section>
 	
