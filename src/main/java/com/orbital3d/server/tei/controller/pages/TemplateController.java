@@ -55,4 +55,15 @@ public class TemplateController
 	{
 		return "pages/send";
 	}
+
+	/**
+	 * @param model
+	 * @return Administrator page template name
+	 */
+	@GetMapping("/templates/admin")
+	@RequiresPermissions("tei:administrator")
+	public String admininistratorTemplate(Model model)
+	{
+		return "pages/admin";
+	}
 }

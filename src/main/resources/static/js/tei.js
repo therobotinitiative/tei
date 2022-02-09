@@ -19,6 +19,9 @@ app.config(function ($routeProvider)
 	})
 	.when('/send', {
 		templateUrl: '/templates/send'
+	})
+	.when('/admin', {
+		templateUrl: 'templates/admin'
 	});
 });
 
