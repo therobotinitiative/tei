@@ -1,7 +1,6 @@
 package com.orbital3d.server.tei.service;
 
-import java.math.BigInteger;
-
+import org.bson.types.ObjectId;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +20,7 @@ import com.orbital3d.server.tei.type.DomainObject;
  * @param <T>
  * @param <R>
  */
-public interface CrudService<T extends DomainObject, R extends CrudRepository<T, BigInteger>>
+public interface CrudService<T extends DomainObject, R extends CrudRepository<T, ObjectId>>
 {
 	/**
 	 * Default implementation for saving domain object.

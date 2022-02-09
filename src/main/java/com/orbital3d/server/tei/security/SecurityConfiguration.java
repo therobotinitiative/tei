@@ -21,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import com.orbital3d.server.tei.database.document.Permissions;
 import com.orbital3d.server.tei.database.document.User;
+import com.orbital3d.server.tei.database.repository.PermissionsRepository;
 import com.orbital3d.server.tei.database.repository.UserRepository;
 import com.orbital3d.server.tei.service.PasswordService;
 
@@ -30,6 +32,9 @@ public class SecurityConfiguration
 {
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PermissionsRepository permissionsRepository;
 
 	@Autowired
 	private PasswordService passwordService;
@@ -81,12 +86,14 @@ public class SecurityConfiguration
 			@Override
 			protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals)
 			{
+				// This is the old way, wonder if there is a way to directly query permissions.
+				// Creating the query manually perhaps?
+				// by user name?
 				String userName = (String) principals.getPrimaryPrincipal();
-				// TODO : Get authorization information fr the user
+				User user = userRepository.findByUserName(userName);
+				Permissions permissions = permissionsRepository.findByUser(user);
 				SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-				authorizationInfo.addStringPermission("tei:index");
-				authorizationInfo.addStringPermission("tei:view");
-				authorizationInfo.addStringPermission("tei:send");
+				authorizationInfo.addStringPermissions(permissions.getPermissions());
 				return authorizationInfo;
 			}
 		};

@@ -1,7 +1,6 @@
 package com.orbital3d.server.tei.database.repository;
 
-import java.math.BigInteger;
-
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import com.orbital3d.server.tei.database.document.User;
@@ -12,7 +11,7 @@ import com.orbital3d.server.tei.database.document.User;
  * @author msiren
  *
  */
-public interface UserRepository extends MongoRepository<User, BigInteger>
+public interface UserRepository extends MongoRepository<User, ObjectId>
 {
 	/**
 	 * Finds user by its user name.

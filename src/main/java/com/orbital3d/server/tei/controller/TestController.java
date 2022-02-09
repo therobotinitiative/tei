@@ -1,5 +1,8 @@
 package com.orbital3d.server.tei.controller;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.orbital3d.server.tei.database.document.Permissions;
 import com.orbital3d.server.tei.database.document.User;
+import com.orbital3d.server.tei.database.repository.PermissionsRepository;
 import com.orbital3d.server.tei.database.repository.UserRepository;
 import com.orbital3d.server.tei.service.PasswordService;
 import com.orbital3d.server.tei.service.UserService;
@@ -31,6 +36,9 @@ public class TestController
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PermissionsRepository pr;
 
 	@Autowired
 	private PasswordService passwordService;
@@ -72,6 +80,23 @@ public class TestController
 		LOG.info("Created admin object {}", admin);
 		userRepository.save(admin);
 		LOG.info("Saved entity");
+		return "pages/index";
+	}
+
+	@GetMapping("/perms")
+	public String testPermission()
+	{
+		User user = userRepository.findByUserName("admin");
+		Set<String> perms = new HashSet<>();
+		perms.add("tei:index");
+		perms.add("tei:dashboard");
+		perms.add("tei:view");
+		perms.add("tei:templates");
+		perms.add("tei:send");
+		Permissions p = new Permissions();
+		p.setUser(user);
+		p.setPermissions(perms);
+		pr.save(p);
 		return "pages/index";
 	}
 }

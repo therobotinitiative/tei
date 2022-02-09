@@ -1,7 +1,6 @@
 package com.orbital3d.server.tei.database.document;
 
-import java.math.BigInteger;
-
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
@@ -11,7 +10,7 @@ import com.orbital3d.server.tei.type.DomainObject;
 public class User implements DomainObject
 {
 	@MongoId
-	private BigInteger id;
+	private ObjectId id;
 
 	private String userName;
 	private byte[] password;
@@ -22,7 +21,7 @@ public class User implements DomainObject
 		// Default
 	}
 
-	public User(BigInteger id, String userName, byte[] password, byte[] salt)
+	public User(ObjectId id, String userName, byte[] password, byte[] salt)
 	{
 		this.id = id;
 		this.userName = userName;
@@ -30,12 +29,12 @@ public class User implements DomainObject
 		this.salt = salt;
 	}
 
-	public BigInteger getId()
+	public ObjectId getId()
 	{
 		return id;
 	}
 
-	public void setId(BigInteger id)
+	public void setId(ObjectId id)
 	{
 		this.id = id;
 	}
