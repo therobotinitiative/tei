@@ -1,11 +1,10 @@
 package com.orbital3d.server.tei.controller;
 
-import java.util.Arrays;
-
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class AuthenticationController
 	{
 		String token = new String(passwordService.generateSalt());
 		// Store token to session, TODO: remember expiration
-		request.getSession(true).setAttribute("token", token);
+		SecurityUtils.getSubject().getSession().setAttribute("token", token);
 
 		model.addAttribute("token", token);
 		if (unauth)
@@ -75,21 +74,13 @@ public class AuthenticationController
 			HttpServletRequest request, HttpServletResponse response, Model model)
 	{
 		User user = userService.findUser(userName);
-		if (user != null && token.equals(request.getSession(false).getAttribute("token")))
+		String sessionToken = (String) SecurityUtils.getSubject().getSession().getAttribute("token");
+		if (user != null && token.equals(sessionToken))
 		{
-			String authToken = verifyPassword(password, user);
-			if (authToken != null)
-			{
-				// Save authentication token as cookie
-				Cookie cookie = new Cookie("auth", authToken);
-				cookie.setMaxAge(60 * 60); // One hour
-				response.addCookie(cookie);
-				// Save the authentication token into session data
-				request.getSession(false).setAttribute("auth", authToken);
-
-				LOG.info("{} user logged in with token {}", user.getUserName(), token);
-				return "redirect:/tei#!/dashboard";
-			}
+			SecurityUtils.getSubject().login(new UsernamePasswordToken(userName, password.toCharArray()));
+			LOG.info("{} user logged in with token {}", user.getUserName(), token);
+			return "redirect:/tei#!/dashboard";
+//			}
 		}
 		throw new AuthenticationFailedExcetion();
 	}
@@ -103,21 +94,7 @@ public class AuthenticationController
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request)
 	{
-		request.getSession().invalidate();
 		LOG.info("User logged out");
 		return "redirect:login";
-	}
-
-	private String verifyPassword(String password, User user)
-	{
-		// Hash the given password
-		byte[] pwd = passwordService.hashPassword(password, user.getSalt());
-		// Compare with one is data storage
-		if (Arrays.compare(pwd, user.getPassword()) == 0)
-		{
-			return new String(passwordService.generateSalt());
-		}
-		// TODO : throw exception
-		return null;
 	}
 }

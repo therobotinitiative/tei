@@ -1,5 +1,6 @@
 package com.orbital3d.server.tei.controller.pages;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +28,7 @@ public class TemplateController
 	 * @return View page template name
 	 */
 	@GetMapping("/templates/view")
+	@RequiresPermissions("tei:view")
 	public String viewTemplate(Model model)
 	{
 		return "pages/view";
@@ -37,6 +39,7 @@ public class TemplateController
 	 * @return Template page template name
 	 */
 	@GetMapping("/templates/template")
+	@RequiresPermissions("tei:templates")
 	public String templateTemplate(Model model)
 	{
 		return "pages/template";
@@ -47,6 +50,7 @@ public class TemplateController
 	 * @return Send page template name
 	 */
 	@GetMapping("/templates/send")
+	@RequiresPermissions("tei:send")
 	public String sendTemplate(Model model)
 	{
 		return "pages/send";

@@ -3,6 +3,7 @@ package com.orbital3d.server.tei.controller.pages;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ public class IndexController
 	 * @param model
 	 * @return Index page template name
 	 */
+	@RequiresPermissions("tei:index")
 	@GetMapping("/tei")
 	public String index(Model model)
 	{
