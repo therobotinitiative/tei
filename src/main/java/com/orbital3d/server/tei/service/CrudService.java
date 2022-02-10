@@ -1,5 +1,7 @@
 package com.orbital3d.server.tei.service;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.transaction.annotation.Propagation;
@@ -55,6 +57,16 @@ public interface CrudService<T extends DomainObject, R extends CrudRepository<T,
 	default void delete(T data)
 	{
 		getRepository().delete(data);
+	}
+
+	/**
+	 * Default implementation for finding all domain objects.
+	 * 
+	 * @return List of all domain objects
+	 */
+	default List<T> findAll()
+	{
+		return (List<T>) getRepository().findAll();
 	}
 
 	/**

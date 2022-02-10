@@ -107,7 +107,7 @@ public class SecurityConfiguration
 		DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
 
 		// logged in users with the 'admin' role
-		chainDefinition.addPathDefinition("/admin/**", "authc, roles[admin]");
+//		chainDefinition.addPathDefinition("/admin/**", "authc, roles[admin]");
 
 		// all other paths require a logged in user or uses annotations, need to figure
 		// out how to protect resource paths as needed!

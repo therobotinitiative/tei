@@ -1,3 +1,18 @@
-<div style="background:#8a8a8a">
-	<h1>Administrator thingy</h1>
+<div style="background:#8a8a8a" ng-controller="adminUserController">
+	<header>User</header>
+	<ul>
+		<li ng-repeat="user in users">
+			{{user.userName}}:
+			<input type="password" id="user-{{user.userName}}-pwd">
+			<button ng-click="changePassword(user.userName)" th:text="#{CHANGE_PASSWORD}">chpwd</button>
+		</li>
+	</ul>
+	<br>
+	<button ng-click="getUsers()">Get</button>
+	<hr>
+	<div>
+		[[#{USER_NAME}]]: <input type="text" id="new_username">
+		<br>
+		<button ng-click="addUser()" th:text="#{ADD}">add</button>
+	</div>
 </div>

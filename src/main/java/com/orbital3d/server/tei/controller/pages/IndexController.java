@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
@@ -93,8 +94,7 @@ public class IndexController
 		Subject subject = SecurityUtils.getSubject();
 		for (MenuContainer menuContainer : menuItems)
 		{
-			// TODO Use apache common string utils
-			if (menuContainer.getPermission().equals("") || subject.isPermitted(menuContainer.getPermission()))
+			if (StringUtils.isEmpty(menuContainer.getPermission()) || subject.isPermitted(menuContainer.getPermission()))
 			{
 				menu.put(menuContainer.getUrl(), menuContainer.getLocalisationKey());
 			}
