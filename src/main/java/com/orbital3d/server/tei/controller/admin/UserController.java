@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -114,7 +115,13 @@ public class UserController
 		userService.save(user);
 	}
 
-	@GetMapping("admin/user/permissions/{username}")
+	/**
+	 * Retrieves user permissions.
+	 * 
+	 * @param userName User name
+	 * @return {@link Set} of user permissions
+	 */
+	@GetMapping("/admin/user/permissions/{username}")
 //	@RequiresPermissions(TEIPermissions.ADMIN_USER_PERMISSIONS)
 	public Set<String> getUserPermissions(@PathVariable("username") String userName)
 	{
@@ -124,6 +131,32 @@ public class UserController
 			return permissions.getPermissions();
 		}
 		return null;
+	}
+
+	/**
+	 * Delete user.<br>
+	 * <br>
+	 * <h3>Required oermissions:</h3><br>
+	 * <ul>
+	 * <li>{@link TEIPermissions#ADMIN_USER_DELETE}</li>
+	 * </ul>
+	 * 
+	 * @param userName User name to delete
+	 */
+	@DeleteMapping("/admin/user/{username}")
+	public void delete(@PathVariable("username") String userName)
+	{
+		User user = userService.findUser(userName);
+		if (user != null)
+		{
+			// Clean up all the user related information
+			Permissions permissions = permissionRepository.findByUser(user);
+			if (permissions != null)
+			{
+				permissionRepository.delete(permissions);
+			}
+			userService.delete(user);
+		}
 	}
 
 }

@@ -1,6 +1,5 @@
 package com.orbital3d.server.tei.controller.admin;
 
-import java.util.List;
 import java.util.Set;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -37,7 +36,7 @@ public class PermissionController
 
 	@GetMapping("/admin/perm/all")
 	@RequiresPermissions(TEIPermissions.ADMINISTRATOR)
-	public List<String> getAllPermissions() throws IllegalArgumentException, IllegalAccessException
+	public Set<String> getAllPermissions() throws IllegalArgumentException, IllegalAccessException
 	{
 		return systemPermissions.allPermissions();
 	}

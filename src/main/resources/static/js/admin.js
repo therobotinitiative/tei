@@ -93,7 +93,21 @@ app.controller('adminUserController', function($scope, $http)
 		{
 			$scope.all_permissions = response.data;
 		});
-	}
+	};
+	/**
+	 * Delete current user.
+	 */
+	$scope.delete_user = function()
+	{
+		$http.delete('/admin/user/' + $scope.current_user.user_name).then(function(response)
+		{
+			if (response.status == 200)
+			{
+				alert('User deleted');
+				$scope.get_users();
+			}
+		});
+	};
 	// Invoked when script loaded.
 	$scope.get_users();
 	$scope.get_permissions();

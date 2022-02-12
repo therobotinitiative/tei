@@ -25,6 +25,7 @@ public final class TEIPermissions implements SystemPermissions
 	public static final String ADMIN_CREATE_USER = "tei:administrator:createuser";
 	public static final String ADMIN_UPDATE_USE_PASSWORD = "tei:administrator:updateuserpassword";
 	public static final String ADMIN_USER_PERMISSIONS = "tei:administrator:permissions";
+	public static final String ADMIN_USER_DELETE = "tei:administrator:deleteuser";
 
 	@Override
 	public Set<String> allPermissions() throws IllegalArgumentException, IllegalAccessException

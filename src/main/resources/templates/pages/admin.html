@@ -9,7 +9,7 @@
 	<div>
 		[[#{USERNAME}]]: <input type="text" id="new_username">
 		<br>
-		<button ng-click="addUser()" th:text="#{ADD}">[[#{ADD}]]</button>
+		<button ng-click="add_user()" th:text="#{ADD}">[[#{ADD}]]</button>
 	</div>
 	<div class="permission-box">
 		<label>{{current_user.user_name}}</label><br>
@@ -23,4 +23,5 @@
 		</span>
 	</div>
 	<button ng-click="update_permissions()" th:text="#{UPDATE_PERMISSIONS}">uptperm</button>
+	<button ng-click="delete_user()" th:tex="#{DELETE}">delete</button>
 </div>
