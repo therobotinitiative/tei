@@ -8,8 +8,10 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.orbital3d.server.tei.type.DomainObject;
+
 @Document(collection = "permissions")
-public class Permissions
+public class Permissions implements DomainObject
 {
 	@Id
 	private ObjectId id;

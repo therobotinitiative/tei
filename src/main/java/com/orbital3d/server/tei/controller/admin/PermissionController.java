@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.orbital3d.server.tei.database.document.Permissions;
 import com.orbital3d.server.tei.database.document.User;
-import com.orbital3d.server.tei.database.repository.PermissionsRepository;
 import com.orbital3d.server.tei.security.permissiom.SystemPermissions;
 import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
+import com.orbital3d.server.tei.service.PermissionsService;
 import com.orbital3d.server.tei.service.UserService;
 
 @RestController
@@ -32,7 +32,7 @@ public class PermissionController
 	private UserService userService;
 
 	@Autowired
-	private PermissionsRepository permissionsRepository;
+	private PermissionsService permissionsService;
 
 	@GetMapping("/admin/perm/all")
 	@RequiresPermissions(TEIPermissions.ADMINISTRATOR)
@@ -48,13 +48,13 @@ public class PermissionController
 		LOG.trace("Updating permissions for {}", userName);
 
 		User user = userService.findUser(userName);
-		Permissions userPermissions = permissionsRepository.findByUser(user);
+		Permissions userPermissions = permissionsService.findByUser(user);
 		if (userPermissions == null)
 		{
 			userPermissions = new Permissions();
 			userPermissions.setUser(user);
 		}
 		userPermissions.setPermissions(permissions);
-		permissionsRepository.save(userPermissions);
+		permissionsService.save(userPermissions);
 	}
 }
