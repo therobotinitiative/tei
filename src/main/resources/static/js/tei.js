@@ -1,4 +1,4 @@
-var app = angular.module('tei', ['ngRoute']);
+var app = angular.module('tei', ['ngRoute', 'checklist-model']);
 
 /**
  * Routes

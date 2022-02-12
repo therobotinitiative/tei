@@ -2,6 +2,7 @@ package com.orbital3d.server.tei.controller.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.orbital3d.server.tei.database.document.Permissions;
 import com.orbital3d.server.tei.database.document.User;
+import com.orbital3d.server.tei.database.repository.PermissionsRepository;
+import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 import com.orbital3d.server.tei.service.PasswordService;
 import com.orbital3d.server.tei.service.UserService;
 
@@ -28,17 +32,20 @@ import com.orbital3d.server.tei.service.UserService;
 public class UserController
 {
 	@Autowired
-	private UserService us;
+	private UserService userService;
 
 	@Autowired
-	private PasswordService ps;
+	private PasswordService passwordService;
+
+	@Autowired
+	private PermissionsRepository permissionRepository;
 
 	/**
 	 * Get user or all users. User can be retrieved with user name, but if the user
 	 * name is omitted all users will be returned.<br>
 	 * <h3>Required permission:</h3><br>
 	 * <ul>
-	 * <li>tei:afministrator</li>
+	 * <li>{@link TEIPermissions#ADMINISTRATOR}</li>
 	 * </ul>
 	 * 
 	 * @param userName User name to getM optional
@@ -47,18 +54,18 @@ public class UserController
 	@GetMapping(path =
 	{ "/admin/user", "/admin/user/{username}" }, produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
-	@RequiresPermissions("tei:administrator")
+	@RequiresPermissions(TEIPermissions.ADMINISTRATOR)
 	public List<User> getUser(@PathVariable(name = "username", required = false) String userName)
 	{
 		List<User> user = null;
 		if (StringUtils.isNotEmpty(userName))
 		{
 			user = new ArrayList<>();
-			user.add(us.findUser(userName));
+			user.add(userService.findUser(userName));
 		}
 		else
 		{
-			user = us.findAll();
+			user = userService.findAll();
 		}
 		return user;
 	}
@@ -67,7 +74,7 @@ public class UserController
 	 * Create new user. <b>Password is not set.</b><br>
 	 * <h3>Required permission:</h3><br>
 	 * <ul>
-	 * <li>tei:administrator:createuser</li>
+	 * <li>{@link TEIPermissions#ADMIN_CREATE_USER}</li>
 	 * </ul>
 	 * 
 	 * @param userName User name to create
@@ -75,12 +82,12 @@ public class UserController
 	 */
 	@PostMapping(path = "/admin/users/{username}", produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
-	// @RequiresPermissions("tei:administrator:createuser")
+	// @RequiresPermissions(SystemPermissions.ADMIN_CREATE_USER)
 	public User creeateUser(@PathVariable("username") String userName)
 	{
-		User u = new User();
-		u.setUserName(userName);
-		return us.save(u);
+		User user = new User();
+		user.setUserName(userName);
+		return userService.save(user);
 	}
 
 	/**
@@ -88,23 +95,35 @@ public class UserController
 	 * just updated.<br>
 	 * <h3>Required permission:</h3><br>
 	 * <ul>
-	 * <li>tei:administrator:updateuserpassword</li>
+	 * <li>{@link TEIPermissions#ADMIN_UPDATE_USE_PASSWORD}</li>
 	 * </ul>
 	 * 
 	 * @param userName User name
 	 * @param password New password
 	 */
 	@PutMapping("/admin/users/{username}/{password}")
-	// @RequiresPermissions("tei:administrator:updateuserpassword")
+	// @RequiresPermissions(SystemPermissions.ADMIN_UPDATE_USE_PASSWORD)
 	public void updateUPassword(@PathVariable("username") String userName, @PathVariable("password") String password)
 	{
-		User u = us.findUser(userName);
+		User user = userService.findUser(userName);
 		// Hash the password and all that jazz
-		byte[] salt = ps.generateSalt();
-		byte[] hpwd = ps.hashPassword(password, salt);
-		u.setPassword(hpwd);
-		u.setSalt(salt);
-		us.save(u);
+		byte[] salt = passwordService.generateSalt();
+		byte[] hashedPassword = passwordService.hashPassword(password, salt);
+		user.setPassword(hashedPassword);
+		user.setSalt(salt);
+		userService.save(user);
+	}
+
+	@GetMapping("admin/user/permissions/{username}")
+//	@RequiresPermissions(TEIPermissions.ADMIN_USER_PERMISSIONS)
+	public Set<String> getUserPermissions(@PathVariable("username") String userName)
+	{
+		Permissions permissions = permissionRepository.findByUser(userService.findUser(userName));
+		if (permissions != null)
+		{
+			return permissions.getPermissions();
+		}
+		return null;
 	}
 
 }

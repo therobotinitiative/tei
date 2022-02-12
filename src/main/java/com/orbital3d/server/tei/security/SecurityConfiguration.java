@@ -93,8 +93,12 @@ public class SecurityConfiguration
 				User user = userRepository.findByUserName(userName);
 				Permissions permissions = permissionsRepository.findByUser(user);
 				SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
-				authorizationInfo.addStringPermissions(permissions.getPermissions());
-				return authorizationInfo;
+				if (permissions != null)
+				{
+					authorizationInfo.addStringPermissions(permissions.getPermissions());
+					return authorizationInfo;
+				}
+				return null;
 			}
 		};
 	}

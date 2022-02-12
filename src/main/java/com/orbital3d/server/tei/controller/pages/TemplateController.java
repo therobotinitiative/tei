@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
+
 /**
  * Template creation page controller.
  * 
@@ -18,6 +20,7 @@ public class TemplateController
 	 * @return Dashboard page template name
 	 */
 	@GetMapping("/templates/dashboard")
+	@RequiresPermissions(TEIPermissions.TEI_VIEW_DASHBOARD)
 	public String createDashboardPage()
 	{
 		return "pages/dashboard";
@@ -28,7 +31,7 @@ public class TemplateController
 	 * @return View page template name
 	 */
 	@GetMapping("/templates/view")
-	@RequiresPermissions("tei:view")
+	@RequiresPermissions(TEIPermissions.TEI_VIEW_VIEW)
 	public String viewTemplate(Model model)
 	{
 		return "pages/view";
@@ -39,7 +42,7 @@ public class TemplateController
 	 * @return Template page template name
 	 */
 	@GetMapping("/templates/template")
-	@RequiresPermissions("tei:templates")
+	@RequiresPermissions(TEIPermissions.TEI_VIEW_TEMPLATE)
 	public String templateTemplate(Model model)
 	{
 		return "pages/template";
@@ -50,7 +53,7 @@ public class TemplateController
 	 * @return Send page template name
 	 */
 	@GetMapping("/templates/send")
-	@RequiresPermissions("tei:send")
+	@RequiresPermissions(TEIPermissions.TEI_VIEW_SEND)
 	public String sendTemplate(Model model)
 	{
 		return "pages/send";
@@ -61,7 +64,7 @@ public class TemplateController
 	 * @return Administrator page template name
 	 */
 	@GetMapping("/templates/admin")
-	@RequiresPermissions("tei:administrator")
+	@RequiresPermissions(TEIPermissions.ADMINISTRATOR)
 	public String admininistratorTemplate(Model model)
 	{
 		return "pages/admin";

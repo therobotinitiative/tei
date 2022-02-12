@@ -1,18 +1,26 @@
-<div style="background:#8a8a8a" ng-controller="adminUserController">
-	<header>User</header>
+<div class="admin-view" ng-controller="adminUserController">
+	<header>[[#{USERS}]]</header>
 	<ul>
-		<li ng-repeat="user in users">
+		<li ng-repeat="user in users" ng-click="select_user(user.userName)" ng-class="current_user.user_name == user.userName ? 'user-li-selected' : 'user-li-notselected'">
 			{{user.userName}}:
-			<input type="password" id="user-{{user.userName}}-pwd">
-			<button ng-click="changePassword(user.userName)" th:text="#{CHANGE_PASSWORD}">chpwd</button>
 		</li>
 	</ul>
-	<br>
-	<button ng-click="getUsers()">Get</button>
 	<hr>
 	<div>
-		[[#{USER_NAME}]]: <input type="text" id="new_username">
+		[[#{USERNAME}]]: <input type="text" id="new_username">
 		<br>
-		<button ng-click="addUser()" th:text="#{ADD}">add</button>
+		<button ng-click="addUser()" th:text="#{ADD}">[[#{ADD}]]</button>
 	</div>
+	<div class="permission-box">
+		<label>{{current_user.user_name}}</label><br>
+		<h2>[[#{PASSWORD}]]:</h2>
+			<input type="password" id="user-{{current_user.user_name}}-pwd">
+			<button ng-click="change_password(current_user.user_name)" th:text="#{CHANGE_PASSWORD}">chpwd</button>
+		<h2>[[#{PERMISSIONS}]]:</h2>
+		<span ng-repeat="permission in all_permissions">
+			<input type="checkbox" id="{{permission}}" value="{{permission}}" checklist-model="current_user.permissions" checklist-value="permission">
+			<label>{{permission}}</label>
+		</span>
+	</div>
+	<button ng-click="update_permissions()" th:text="#{UPDATE_PERMISSIONS}">uptperm</button>
 </div>

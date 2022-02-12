@@ -54,6 +54,7 @@ section::after {
 
 /* Style the footer */
 footer {
+  clear: both;
   background-color: #333333;
   padding: 10px;
   text-align: right;
@@ -67,11 +68,51 @@ footer {
     height: auto;
   }
 }
+
+ul {
+	list-style-type: none;
+}
+
+.user-li-selected {
+	background-color: white;
+	cursor:pointer;
+}
+
+.user-li-notselected {
+	background-color: #5a5a5a;
+	cursor:pointer;
+}
+.user-li-notselected:hover {
+	background-color: #8a8a8a;
+	cursor:pointer;
+}
+
+.admin-view {
+	background-color: #afafaf;
+}
+
+.permission-box {
+	padding: 3px;
+	border: 1px solid black;
+}
+
+div.permission-box span {
+	padding: 3px;
+	background-color: #5a5a5a;
+}
+
+div.permission-box label {
+	 display: inline;
+	 background-color: lightgray;
+	 padding: 2px;
+}
+
 </style>
 
 <!-- Using AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular-route.js"></script>
+<script src="/js/checklist-model.js"></script>
 <script src="/js/tei.js"></script>
 <script src="/js/admin.js"></script>
 </head>

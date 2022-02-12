@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.orbital3d.server.tei.i18n.LocalisationKeys;
+import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 
 /**
  * Index page controller.
@@ -77,18 +78,18 @@ public class IndexController
 	 * @param model
 	 * @return Index page template name
 	 */
-	@RequiresPermissions("tei:index")
+	@RequiresPermissions(TEIPermissions.TEI_INDEX)
 	@GetMapping("/tei")
 	public String index(Model model)
 	{
 		Map<String, LocalisationKeys> menu = new LinkedHashMap<>();
 		Set<MenuContainer> menuItems = new LinkedHashSet<>();
 
-		menuItems.add(MenuContainer.of("#!/dashbnoard", LocalisationKeys.DASHBOARD, "tei:dashboard"));
-		menuItems.add(MenuContainer.of("#!/view", LocalisationKeys.VIEW, "tei:view"));
-		menuItems.add(MenuContainer.of("#!/send", LocalisationKeys.SEND, "tei:dashboard"));
-		menuItems.add(MenuContainer.of("#!/template", LocalisationKeys.TEMPLATE, "tei:templates"));
-		menuItems.add(MenuContainer.of("#!/admin", LocalisationKeys.ADMINISTRATOR, "tei:administrator"));
+		menuItems.add(MenuContainer.of("#!/dashbnoard", LocalisationKeys.DASHBOARD, TEIPermissions.TEI_VIEW_DASHBOARD));
+		menuItems.add(MenuContainer.of("#!/view", LocalisationKeys.VIEW, TEIPermissions.TEI_VIEW_VIEW));
+		menuItems.add(MenuContainer.of("#!/send", LocalisationKeys.SEND, TEIPermissions.TEI_VIEW_SEND));
+		menuItems.add(MenuContainer.of("#!/template", LocalisationKeys.TEMPLATE, TEIPermissions.TEI_VIEW_TEMPLATE));
+		menuItems.add(MenuContainer.of("#!/admin", LocalisationKeys.ADMINISTRATOR, TEIPermissions.ADMINISTRATOR));
 		menuItems.add(MenuContainer.of("/logout", LocalisationKeys.LOGOUT, ""));
 
 		Subject subject = SecurityUtils.getSubject();
