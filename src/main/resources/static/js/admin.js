@@ -1,12 +1,12 @@
 app.controller('adminUserController', function($scope, $http)
 {
 	// All users from server side
-	$scope.users = [];
+	$scope.users = {};
 	// All available permissions from server side
 	$scope.all_permissions = [];
 	// The current user alll operations will target
 	$scope.current_user = {
-		user_name: '',
+		user: {},
 		permissions: {}
 	};
 	/**
@@ -18,7 +18,7 @@ app.controller('adminUserController', function($scope, $http)
 		{
 			$scope.users = response.data;
 			// Select the first user by default
-			$scope.current_user.user_name = $scope.users[0].userName;
+			$scope.select_user($scope.users[0].userName);
 			$scope.user_permissions();
 		});
 	};
@@ -31,7 +31,12 @@ app.controller('adminUserController', function($scope, $http)
 		var new_user = document.getElementById(element_id).value;
 		$http.post('/admin/users/' + new_user).then(function(response)
 		{
-			$scope.users.push(response.data);
+			if (response.status == 200)
+			{
+				$scope.users.push(response.data);
+				// TODO : Info box
+				alert('user added');
+			}
 		});
 		document.getElementById(element_id).value = '';
 	};
@@ -40,13 +45,16 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.change_password = function()
 	{
-		var user_name = $scope.current_user.user_name;
+		var user_name = $scope.current_user.user.userName;
 		var element_id = 'user-' + user_name + '-pwd';
 		var new_password = document.getElementById(element_id).value;
 		$http.put('/admin/users/'+user_name+'/'+new_password).then(function(response)
 		{
 			// TODO : infobox
-			alert('password set');
+			if (response.status == 200)
+			{
+				alert('password set');
+			}
 		});
 		document.getElementById(element_id).value = '';
 	};
@@ -55,7 +63,7 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.user_permissions = function()
 	{
-		$http.get('/admin/user/permissions/' + $scope.current_user.user_name).then(function(response)
+		$http.get('/admin/user/permissions/' + $scope.current_user.user.userName).then(function(response)
 		{
 			$scope.current_user.permissions = {};
 			if (response.data !== undefined && response.data !=='')
@@ -69,10 +77,13 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.update_permissions = function()
 	{
-		$http.put('/admin/perm/' + $scope.current_user.user_name, $scope.current_user.permissions).then(function(response)
+		$http.put('/admin/perm/' + $scope.current_user.user.userName, $scope.current_user.permissions).then(function(response)
 		{
 			// TODO : infobox
-			alert('permissions updated');
+			if (response.status == 200)
+			{
+				alert('permissions updated');
+			}
 		});
 	};
 	/**
@@ -81,7 +92,10 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.select_user = function(user_name)
 	{
-		$scope.current_user.user_name = user_name;
+		// Find the user from users
+		var user = $scope.users.find(element => element.userName == user_name);
+		console.log(user);
+		$scope.current_user.user = user;
 		$scope.user_permissions();
 	};
 	/**
@@ -89,7 +103,7 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.get_permissions = function()
 	{
-		$http.get('admin/perm/all').then(function(response)
+		$http.get('/admin/perm/all').then(function(response)
 		{
 			$scope.all_permissions = response.data;
 		});
@@ -99,7 +113,7 @@ app.controller('adminUserController', function($scope, $http)
 	 */
 	$scope.delete_user = function()
 	{
-		$http.delete('/admin/user/' + $scope.current_user.user_name).then(function(response)
+		$http.delete('/admin/user/' + $scope.current_user.user.userName).then(function(response)
 		{
 			if (response.status == 200)
 			{
@@ -108,6 +122,26 @@ app.controller('adminUserController', function($scope, $http)
 			}
 		});
 	};
+	/**
+	 * Update the user data.
+	 */
+	$scope.update_userdata = function()
+	{
+		var put_data = {
+			'firstName' : $scope.current_user.user.userData.firstName,
+			'lastName' : $scope.current_user.user.userData.lastName,
+			'email' : $scope.current_user.user.userData.email,
+		};
+		$http.put('/admin/userdata/' + $scope.current_user.user.userName, put_data).then(function(response)
+		{
+			if (response.status == 200)
+			{
+				// TODO: Use infobox
+				alert('update done');
+			}
+		});
+		
+	}
 	// Invoked when script loaded.
 	$scope.get_users();
 	$scope.get_permissions();

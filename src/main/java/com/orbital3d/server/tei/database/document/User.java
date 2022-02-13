@@ -15,18 +15,20 @@ public class User implements DomainObject
 	private String userName;
 	private byte[] password;
 	private byte[] salt;
+	private UserData userData;
 
 	public User()
 	{
 		// Default
 	}
 
-	public User(ObjectId id, String userName, byte[] password, byte[] salt)
+	public User(ObjectId id, String userName, byte[] password, byte[] salt, UserData userData)
 	{
 		this.id = id;
 		this.userName = userName;
 		this.password = password;
 		this.salt = salt;
+		this.userData = userData;
 	}
 
 	public ObjectId getId()
@@ -67,6 +69,16 @@ public class User implements DomainObject
 	public void setSalt(byte[] salt)
 	{
 		this.salt = salt;
+	}
+
+	public UserData getUserData()
+	{
+		return userData;
+	}
+
+	public void setUserData(UserData userData)
+	{
+		this.userData = userData;
 	}
 
 	@Override
