@@ -1,0 +1,14 @@
+.information-dialog {
+	background-color: rgb(81, 138, 195);
+	color:white;
+	border-color: white;
+	border-radius: var(--tei-border-radius);
+	border-width: var(--tei-border-width);
+	border-style: var(--tei-border-style);
+	padding: var(--tei-large-padding);
+	max-width: 650px;
+}
+
+.information-content {
+	text-align: center;
+}

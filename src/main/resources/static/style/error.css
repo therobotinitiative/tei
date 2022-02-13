@@ -1,0 +1,23 @@
+.error-dialog {
+	border-width: 5px;
+	border-style: solid;
+	border-color: red;
+	border-radius: 16px;
+	background-color: black;
+	padding: 5px;
+}
+
+div.error-dialog-content h1 {
+	font-size: 280%;
+	color: red;
+	text-align: center;
+	vertical-align: middle;
+	border-bottom: 2px solid red;
+}
+
+div.error-dialog-content label {
+	font-size: 120%;
+	color: red;
+	text-align: center;
+	vertical-align: middle;
+}

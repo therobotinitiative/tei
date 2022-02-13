@@ -1,4 +1,4 @@
-app.controller('adminUserController', function($scope, $http)
+app.controller('adminUserController', function($scope, $http, $rootScope)
 {
 	// All users from server side
 	$scope.users = {};
@@ -34,8 +34,7 @@ app.controller('adminUserController', function($scope, $http)
 			if (response.status == 200)
 			{
 				$scope.users.push(response.data);
-				// TODO : Info box
-				alert('user added');
+				$rootScope.information.show('User ' + new_user + ' added');
 			}
 		});
 		document.getElementById(element_id).value = '';
@@ -50,10 +49,9 @@ app.controller('adminUserController', function($scope, $http)
 		var new_password = document.getElementById(element_id).value;
 		$http.put('/admin/users/'+user_name+'/'+new_password).then(function(response)
 		{
-			// TODO : infobox
 			if (response.status == 200)
 			{
-				alert('password set');
+				$rootScope.information.show('Password changed for ' + user_name);
 			}
 		});
 		document.getElementById(element_id).value = '';
@@ -79,10 +77,9 @@ app.controller('adminUserController', function($scope, $http)
 	{
 		$http.put('/admin/perm/' + $scope.current_user.user.userName, $scope.current_user.permissions).then(function(response)
 		{
-			// TODO : infobox
 			if (response.status == 200)
 			{
-				alert('permissions updated');
+				$rootScope.information.show('Permissions for ' + $scope.current_user.user.userName + ' updated')
 			}
 		});
 	};
@@ -94,7 +91,6 @@ app.controller('adminUserController', function($scope, $http)
 	{
 		// Find the user from users
 		var user = $scope.users.find(element => element.userName == user_name);
-		console.log(user);
 		$scope.current_user.user = user;
 		$scope.user_permissions();
 	};
@@ -117,7 +113,7 @@ app.controller('adminUserController', function($scope, $http)
 		{
 			if (response.status == 200)
 			{
-				alert('User deleted');
+				$rootScope.information.show('User ' + $scope.current_user.user.userName + ' deleted');
 				$scope.get_users();
 			}
 		});
@@ -136,8 +132,7 @@ app.controller('adminUserController', function($scope, $http)
 		{
 			if (response.status == 200)
 			{
-				// TODO: Use infobox
-				alert('update done');
+				$rootScope.information.show('User information for ' + $scope.current_user.user.userName + ' updated');
 			}
 		});
 		

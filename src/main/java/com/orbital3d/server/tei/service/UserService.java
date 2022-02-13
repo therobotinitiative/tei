@@ -18,4 +18,10 @@ public interface UserService extends CrudService<User, UserRepository>
 	 * @return {@link User} object
 	 */
 	User findUser(String userName);
+
+	/**
+	 * @param userName User name to check
+	 * @return true if the user name already exist
+	 */
+	boolean exists(String userName);
 }

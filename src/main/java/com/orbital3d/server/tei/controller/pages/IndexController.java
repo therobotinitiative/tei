@@ -85,7 +85,7 @@ public class IndexController
 		Map<String, LocalisationKeys> menu = new LinkedHashMap<>();
 		Set<MenuContainer> menuItems = new LinkedHashSet<>();
 
-		menuItems.add(MenuContainer.of("#!/dashbnoard", LocalisationKeys.DASHBOARD, TEIPermissions.TEI_VIEW_DASHBOARD));
+		menuItems.add(MenuContainer.of("#!/dashboard", LocalisationKeys.DASHBOARD, TEIPermissions.TEI_VIEW_DASHBOARD));
 		menuItems.add(MenuContainer.of("#!/view", LocalisationKeys.VIEW, TEIPermissions.TEI_VIEW_VIEW));
 		menuItems.add(MenuContainer.of("#!/send", LocalisationKeys.SEND, TEIPermissions.TEI_VIEW_SEND));
 		menuItems.add(MenuContainer.of("#!/template", LocalisationKeys.TEMPLATE, TEIPermissions.TEI_VIEW_TEMPLATE));

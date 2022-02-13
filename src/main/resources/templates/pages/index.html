@@ -108,6 +108,7 @@ div.permission-box label {
 }
 
 </style>
+<link rel="stylesheet" href="style/tei.css">
 
 <!-- Using AngularJS -->
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
@@ -139,6 +140,26 @@ div.permission-box label {
 	&copy;2022 Orbital3d Studios
 	</footer>
 </div>
+
+<!-- Error dialog -->
+<div id="error-dialog-background" class="modal-background" ng-if="errorDialog.visible == true">
+	<div id="error-dialog" class="error-dialog center-dialog" ng-click="errorDialog.hide()">
+		<div id="error-dialg-content" class="error-dialog-content dialog-content">
+			<h1>{{errorDialog.message}}</h1>
+			<label>{{errorDialog.description}}</label>
+		</div>
+	</div>
+</div>
+	
+<!-- ---------- Information Dialog --------------- -->
+<div class="modal-background" id="information-dialog" ng-if="information.visible == true">
+	<div class="center-dialog information-dialog" ng-click="information.hide()">
+		<div class="dialog-content information-content">
+			<h1 class="middle-align">{{information.message}}</h1><br>
+		</div>
+	</div>
+</div>
+
 
 </body>
 </html>

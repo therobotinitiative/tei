@@ -80,15 +80,21 @@ public class UserController
 	 * 
 	 * @param userName User name to create
 	 * @return Newly created {@link User} as JSON
+	 * @throws IllegalStateException If user with the user name already exists
 	 */
 	@PostMapping(path = "/admin/users/{username}", produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
 	// @RequiresPermissions(SystemPermissions.ADMIN_CREATE_USER)
 	public User creeateUser(@PathVariable("username") String userName)
 	{
+		if (userService.exists(userName))
+		{
+			throw new IllegalStateException("User already exists");
+		}
 		User user = new User();
 		user.setUserName(userName);
 		return userService.save(user);
+
 	}
 
 	/**

@@ -1,0 +1,42 @@
+@import "common.css";
+@import "dialog.css";
+@import "error.css";
+@import "information.css";
+
+/*
+ * Define tei variables
+ */
+:root {
+	/* ========= Colors, dark = * 0.4, darker = * 0.8 =========== */
+	--tei-background-color: rgb(77, 85, 89);
+	--tei-background-color-dark: rgb(31, 34, 37);
+	--tei-background-color-darker: rgb(62, 68, 71);
+	--tei-background-color-light: rgb(139, 153, 160);
+	--tei-background-color-lighter: rgb(108, 119, 125);
+	
+	/* ========= Font ============== */
+	--tei-font-color: white;
+	--tei-font-size: 14px;
+	--tei-font-family: Verdana, Arial, sans-serif, system;
+	
+	/* ======== Border =========== */
+	--tei-border-color: rgb(92, 141, 162);
+	--tei-border-radius: 8px;
+	--tei-border-style: solid;
+	--tei-border-width: 2px;
+	
+	--tei-small-padding: 6px;
+	--tei-large-padding: 10px;
+	--tei-small-margin: 6px;
+	--tei-large-margin: 10px;
+	
+	--tei-icon-size-small: 16px;
+	--tei-icon-size-large: 26px;
+	--tei-dialog-icon-widrh: 32px;
+	--tei-dialog-icon-height: 32px;
+	
+	--tei-footer-color: rgb(30, 55, 55);
+	
+	--tei-button-color: rgb(61, 125, 157);
+	--tei-button-color-hover: rgb(79, 177, 227);
+}

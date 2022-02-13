@@ -1,5 +1,6 @@
 package com.orbital3d.server.tei.controller.admin;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -8,11 +9,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.orbital3d.server.tei.database.document.User;
 import com.orbital3d.server.tei.database.document.UserData;
+import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 import com.orbital3d.server.tei.service.UserService;
 
 @RestController
 public class UserDataController
 {
+	/**
+	 * Data Transfer Object for receiving user data.
+	 * 
+	 * @author msiren
+	 *
+	 */
 	// Methods used with reflection
 	@SuppressWarnings("unused")
 	private static final class UserDataControllerDTO
@@ -59,24 +67,36 @@ public class UserDataController
 	}
 
 	@Autowired
-	private UserService us;
+	private UserService userService;
 
+	/**
+	 * Updating user data information.<br>
+	 * <br>
+	 * <h2>Required permissions:</h2><br>
+	 * <ul>
+	 * <li>{@link TEIPermissions#ADMIN_USERDATA_UPDATE}</li>
+	 * </ul>
+	 * 
+	 * @param userName    User name
+	 * @param newUserData User data to update into
+	 */
 	@PutMapping("/admin/userdata/{username}")
+	@RequiresPermissions(TEIPermissions.ADMIN_USERDATA_UPDATE)
 	public void updateUserData(@PathVariable("username") String userName, @RequestBody UserDataControllerDTO newUserData)
 	{
-		User u = us.findUser(userName);
-		if (u != null)
+		User uaer = userService.findUser(userName);
+		if (uaer != null)
 		{
-			UserData ud = u.getUserData();
-			if (ud == null)
+			UserData userData = uaer.getUserData();
+			if (userData == null)
 			{
-				ud = new UserData();
+				userData = new UserData();
 			}
-			ud.setFirstName(newUserData.getFirstName());
-			ud.setLastName(newUserData.getLastName());
-			ud.setEmail(newUserData.getEmail());
-			u.setUserData(ud);
-			us.save(u);
+			userData.setFirstName(newUserData.getFirstName());
+			userData.setLastName(newUserData.getLastName());
+			userData.setEmail(newUserData.getEmail());
+			uaer.setUserData(userData);
+			userService.save(uaer);
 		}
 	}
 }

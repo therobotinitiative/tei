@@ -31,4 +31,10 @@ public class UserServiceImpl implements UserService
 		return getRepository().findByUserName(userName);
 	}
 
+	@Override
+	public boolean exists(String userName)
+	{
+		return getRepository().existsByUserName(userName);
+	}
+
 }

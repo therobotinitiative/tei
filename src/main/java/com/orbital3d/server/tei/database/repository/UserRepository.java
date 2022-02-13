@@ -20,4 +20,10 @@ public interface UserRepository extends MongoRepository<User, ObjectId>
 	 * @return {@link User} object if found.
 	 */
 	User findByUserName(String userName);
+
+	/**
+	 * @param UserName User name to check
+	 * @return true id the user name already exists
+	 */
+	boolean existsByUserName(String UserName);
 }

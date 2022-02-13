@@ -1,0 +1,29 @@
+form.dialog {
+	padding: var(--tei-large-padding);
+	background-color: var(--tei-background-color);
+	border-width: var(--tei-border-width);
+	border-style: var(--tei-border-style);
+	border-color: var(--tei-border-color);
+	border-radius: var(--tei-border-radius);
+}
+
+div.dialog-box {
+	background-color: #263E35;
+	border-radius: var(--tei-border-radius);
+	padding: var(--tei-small-padding);
+}
+
+.center-dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.dialog-content {
+	line-height: 70px;
+}
+
+.middle-align {
+	vertical-align: middle;
+}
