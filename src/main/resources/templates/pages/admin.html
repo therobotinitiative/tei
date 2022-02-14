@@ -7,7 +7,7 @@
 	</ul>
 	<hr>
 	<div>
-		[[#{USERNAME}]]: <input type="text" id="new_username">
+		[[#{USER_NAME}]]: <input type="text" id="new_username">
 		<br>
 		<button ng-click="add_user()" th:text="#{ADD}">[[#{ADD}]]</button>
 	</div>
@@ -20,7 +20,7 @@
 			[[#{FIRST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-fn" ng-model="current_user.user.userData.firstName"><br>
 			[[#{LAST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-ln" ng-model="current_user.user.userData.lastName"><br>
 			[[#{EMAIL}]]: <input type="text" id="ud-{{current_user.user.userName}}-email" ng-model="current_user.user.userData.email"><br>
-			<button ng-click="update_userdata()" th.text="#{UPDATE}">updt</button>
+			<button ng-click="update_userdata()" th:text="#{UPDATE}">updt</button>
 		<h2>[[#{PERMISSIONS}]]:</h2>
 		<span ng-repeat="permission in all_permissions">
 			<input type="checkbox" id="{{permission}}" value="{{permission}}" checklist-model="current_user.permissions" checklist-value="permission">

@@ -33,7 +33,6 @@ function interceptHttpError($q, $rootScope)
 						$rootScope.errorDialog.show('Something went wrong', 'Something wrong do not know what: ' + error.status);
 					}
 			}
-			$rootScope.error.show();
 			return $q.reject(error);
 		}
 	}
