@@ -4,110 +4,6 @@
 <title>TEI</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-* {
-  box-sizing: border-box;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Style the header */
-header {
-  background-color: #5a5a5a;
-  padding: 3px;
-  text-align: left;
-  font-size: 35px;
-  color: white;
-}
-
-/* Create two columns/boxes that floats next to each other */
-nav {
-  float: left;
-  width: 20%;
-  height: 300px; /* only for demonstration, should be removed */
-  background: #888;
-  padding: 20px;
-}
-
-/* Style the list inside the menu */
-nav ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-article {
-  float: left;
-  padding: 20px;
-  width: 80%;
-  background-color: #f1f1f1;
-  height: 300px; /* only for demonstration, should be removed */
-}
-
-/* Clear floats after the columns */
-section::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-/* Style the footer */
-footer {
-  clear: both;
-  background-color: #333333;
-  padding: 10px;
-  text-align: right;
-  color: white;
-}
-
-/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
-@media (max-width: 600px) {
-  nav, article {
-    width: 100%;
-    height: auto;
-  }
-}
-
-ul {
-	list-style-type: none;
-}
-
-.user-li-selected {
-	background-color: white;
-	cursor:pointer;
-}
-
-.user-li-notselected {
-	background-color: #5a5a5a;
-	cursor:pointer;
-}
-.user-li-notselected:hover {
-	background-color: #8a8a8a;
-	cursor:pointer;
-}
-
-.admin-view {
-	background-color: #afafaf;
-}
-
-.permission-box {
-	padding: 3px;
-	border: 1px solid black;
-}
-
-div.permission-box span {
-	padding: 3px;
-	background-color: #5a5a5a;
-}
-
-div.permission-box label {
-	 display: inline;
-	 background-color: lightgray;
-	 padding: 2px;
-}
-
-</style>
 <link rel="stylesheet" href="style/tei.css">
 
 <!-- Using AngularJS -->
@@ -120,25 +16,26 @@ div.permission-box label {
 <body>
 
 <div ng-controller="abc">
-	<header>
-	  <h2>[[#{WELCOME}]] [[${user}]]</h2>
+	<header class="tei-header">
+		<span>
+	  		<h2>[[#{WELCOME}]], [[${user}]]</h2>
+		</span>
+		<span class="menu">
+		    <ul class="menu">
+		    	<li th:each="element : ${menuItems}"><a href="" th:href="${element.key}" th:text="#{${element.value}}">Link</a></li>
+		    </ul>
+		</span>
 	</header>
 	
-	<section>
-	  <nav>
-	    <ul th:each="element : ${menuItems}">
-	    	<li><a href="" th:href="${element.key}" th:text="#{${element.value}}">Link</a></li>
-	    </ul>
-	  </nav>
-	  
-	  <article ng-view>
+	<section class="tei-section">
+	  <article class="area-content" ng-view>
 		  	<!-- View area -->
 	  </article>
+	  <footer>
+		&copy;2022 Orbital3d Studios
+	  </footer>
 	</section>
 	
-	<footer>
-	&copy;2022 Orbital3d Studios
-	</footer>
 </div>
 
 <!-- Error dialog -->

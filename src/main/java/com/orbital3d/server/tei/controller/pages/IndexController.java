@@ -102,6 +102,7 @@ public class IndexController
 		}
 
 		model.addAttribute("menuItems", menu);
+		model.addAttribute("user", "Fetch user name");
 		return "pages/index";
 	}
 }

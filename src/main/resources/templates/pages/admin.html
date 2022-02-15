@@ -1,32 +1,39 @@
 <div class="admin-view" ng-controller="adminUserController">
-	<header>[[#{USERS}]]</header>
-	<ul>
-		<li ng-repeat="user in users" ng-click="select_user(user.userName)" ng-class="current_user.user.userName == user.userName ? 'user-li-selected' : 'user-li-notselected'">
-			{{user.userName}}:
-		</li>
-	</ul>
-	<hr>
-	<div>
-		[[#{USER_NAME}]]: <input type="text" id="new_username">
-		<br>
-		<button ng-click="add_user()" th:text="#{ADD}">[[#{ADD}]]</button>
-	</div>
-	<div class="permission-box">
-		<label>{{current_user.user.userName}}</label><br>
-		<h2>[[#{PASSWORD}]]:</h2>
-			<input type="password" id="user-{{current_user.user.userName}}-pwd">
-			<button ng-click="change_password()" th:text="#{CHANGE_PASSWORD}">chpwd</button>
-		<h2>[[#{USER_DATA}]]</h2>
-			[[#{FIRST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-fn" ng-model="current_user.user.userData.firstName"><br>
-			[[#{LAST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-ln" ng-model="current_user.user.userData.lastName"><br>
-			[[#{EMAIL}]]: <input type="text" id="ud-{{current_user.user.userName}}-email" ng-model="current_user.user.userData.email"><br>
-			<button ng-click="update_userdata()" th:text="#{UPDATE}">updt</button>
+
+	<section>
+		<header>
+			[[#{USERS}]]  
+			<button ng-click="add_user.show()" th:text="#{ADD}">add</button>
+		</header>
+		<div class="admin-user-container">		
+			<section class="admin-user-select">
+				<ul>
+					<li ng-repeat="user in users" ng-click="select_user(user.userName)" ng-class="current_user.user.userName == user.userName ? 'user-li-selected' : 'user-li-notselected'">
+						{{user.userName}}:
+					</li>
+				</ul>
+			</section>
+			<section class="admin-user-data">
+				<label>{{current_user.user.userName}}</label><br>
+				<h2>[[#{PASSWORD}]]:</h2>
+					<input type="password" id="user-{{current_user.user.userName}}-pwd">
+					<button ng-click="change_password()" th:text="#{CHANGE_PASSWORD}">chpwd</button>
+				<h2>[[#{USER_DATA}]]</h2>
+					[[#{FIRST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-fn" ng-model="current_user.user.userData.firstName"><br>
+					[[#{LAST_NAME}]]: <input type="text" id="ud-{{current_user.user.userName}}-ln" ng-model="current_user.user.userData.lastName"><br>
+					[[#{EMAIL}]]: <input type="text" id="ud-{{current_user.user.userName}}-email" ng-model="current_user.user.userData.email"><br>
+					<button ng-click="update_userdata()" th:text="#{UPDATE}">updt</button>
+					<button ng-click="delete_user()" th:tex="#{DELETE}">delete</button>
+			</section>
+		</div>
+	</section>
+
+	<section class="admin-permission-section">
 		<h2>[[#{PERMISSIONS}]]:</h2>
 		<span ng-repeat="permission in all_permissions">
 			<input type="checkbox" id="{{permission}}" value="{{permission}}" checklist-model="current_user.permissions" checklist-value="permission">
 			<label>{{permission}}</label>
 		</span>
-	</div>
-	<button ng-click="update_permissions()" th:text="#{UPDATE_PERMISSIONS}">uptperm</button>
-	<button ng-click="delete_user()" th:tex="#{DELETE}">delete</button>
+		<button ng-click="update_permissions()" th:text="#{UPDATE_PERMISSIONS}">uptperm</button>
+	</section>
 </div>

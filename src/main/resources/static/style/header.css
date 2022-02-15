@@ -1,0 +1,31 @@
+.tei-header {
+	color: white;
+	width: 100%;
+	line-height: 70px;
+	background-color: var(--header-background);
+}
+
+.tei-header h2 {
+	font-size: 160%;
+	margin-left: 30px;
+	font-weight: bold;
+}
+
+ul.menu {
+	disc-type: none;
+	background: var(--menu-background);
+	padding-left: 30px;
+}
+
+li {
+	display: inline;
+	margin-right: 20px;
+	padding: 6px;
+	cursor: pointer;
+}
+
+li:hover {
+	display: inline;
+	background-color: var(--menu-item-hover-background);
+	font-size: 120;
+}

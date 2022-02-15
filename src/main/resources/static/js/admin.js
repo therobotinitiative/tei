@@ -9,6 +9,19 @@ app.controller('adminUserController', function($scope, $http, $rootScope)
 		user: {},
 		permissions: {}
 	};
+	
+	$scope.add_user = {
+		visible: false,
+		show: function()
+		{
+			$scope.add_user.visible = true;
+		},
+		hide: function()
+		{
+			$scope.add_user.visible = false;
+		}
+	};
+	
 	/**
 	 * Get all users.
 	 */
