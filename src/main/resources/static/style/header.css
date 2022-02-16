@@ -6,6 +6,7 @@
 }
 
 .tei-header h2 {
+	color: white;
 	font-size: 160%;
 	margin-left: 30px;
 	font-weight: bold;
@@ -15,6 +16,7 @@ ul.menu {
 	disc-type: none;
 	background: var(--menu-background);
 	padding-left: 30px;
+	color: white;
 }
 
 li {

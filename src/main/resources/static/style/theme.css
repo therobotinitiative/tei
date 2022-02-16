@@ -3,4 +3,11 @@
 	--menu-background: #417d97;
 	--menu-item-background: rgb(45, 105, 131);
 	--menu-item-hover-background: rgb(25, 67, 85);
+	
+	--color-main: rgb(0, 128, 192);
+	--color-main-dark: rgb(1 99 149);
+	--color-button-main: var(--color-main);
+	--color-button-light: rgb(51 187 255);
+	
+	--border-radius: 8px;
 }

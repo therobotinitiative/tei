@@ -3,13 +3,19 @@
 	<section>
 		<header>
 			[[#{USERS}]]  
-			<button ng-click="add_user.show()" th:text="#{ADD}">add</button>
+			<button ng-click="add_user_container.show()" th:text="#{ADD}">add</button>
 		</header>
+		<section class="admin-add-user" ng-if="add_user_container.visible == true">
+			[[#{USER_NAME}]]
+			<input type="text" id="new_username"><br>
+			<button ng-click="add_user()" th:text="#{ADD}">add</button>
+			<button ng-click="add_user_container.hide()" th:text="#{CLOSE}">close</button>
+		</section>
 		<div class="admin-user-container">		
 			<section class="admin-user-select">
 				<ul>
 					<li ng-repeat="user in users" ng-click="select_user(user.userName)" ng-class="current_user.user.userName == user.userName ? 'user-li-selected' : 'user-li-notselected'">
-						{{user.userName}}:
+						{{user.userName}}
 					</li>
 				</ul>
 			</section>
@@ -34,6 +40,7 @@
 			<input type="checkbox" id="{{permission}}" value="{{permission}}" checklist-model="current_user.permissions" checklist-value="permission">
 			<label>{{permission}}</label>
 		</span>
+		<br>
 		<button ng-click="update_permissions()" th:text="#{UPDATE_PERMISSIONS}">uptperm</button>
 	</section>
 </div>

@@ -7,7 +7,7 @@ div.modal-background {
 	background-color: rgba(0,0,0,0.6);
 }
 
-.input {
+input {
 	padding: 6px;
 }
 
@@ -18,7 +18,23 @@ button {
 	border: 0;
 	border-radius: 6px;
 	color: white;
-	background-color:rgb(0, 128, 192);
+	background-color: var(--color-button-main);
 	font-weight: bold;
+	padding: 8px;
+}
+
+button:hover {
+	background-color: var(--color-button-light);
+}
+
+.padding-small {
 	padding: 4px;
+}
+
+.padding-medium {
+	padding: 6px;
+}
+
+.padding-large {
+	padding: 8px;
 }

@@ -10,15 +10,18 @@ app.controller('adminUserController', function($scope, $http, $rootScope)
 		permissions: {}
 	};
 	
-	$scope.add_user = {
+	/**
+	 * Add user container. Contains operations and visibility of yje add user section.
+	 */
+	$scope.add_user_container = {
 		visible: false,
 		show: function()
 		{
-			$scope.add_user.visible = true;
+			$scope.add_user_container.visible = true;
 		},
 		hide: function()
 		{
-			$scope.add_user.visible = false;
+			$scope.add_user_container.visible = false;
 		}
 	};
 	
