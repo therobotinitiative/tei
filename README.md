@@ -4,9 +4,11 @@ TEI - "Tilastoista Enemman Iloa"
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* TEI a questionnaire application
+* Create questinnaire template and send link for answering them
+* Analytics of closed questions
+* Basic user management
+* 0.1-SNAPSHOT
 
 ### How do I get set up? ###
 
@@ -23,5 +25,4 @@ TEI - "Tilastoista Enemman Iloa"
 
 ### Who do I talk to? ###
 
-* Repo owner or admin
-* Other community or team contact
+* Me
