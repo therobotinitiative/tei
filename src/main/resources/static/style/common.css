@@ -38,3 +38,7 @@ button:hover {
 .padding-large {
 	padding: 8px;
 }
+
+.inline {
+	display: inline;
+}

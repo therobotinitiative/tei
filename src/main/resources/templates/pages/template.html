@@ -1,3 +1,56 @@
-<div>
-	<h1>Create template</h1>
+<div ng-controller="templateController">
+	<h1>[[#{TEMPLATE}]]</h1>
+	<nav class="template-toolbar">
+		<button ng-click="template_container.create_new_template()">[[#{NEW_TEMPLATE}]]</button>
+		<button ng-click="template_container.add_question_element('open')">[[#{OPEN_QUESTION}]]</button>
+		<button ng-click="template_container.add_question_element('closed')">[[#{CLOSED_QUESTION}]]</button>
+		<button ng-click="template_container.debug()">debug</button>
+	</nav>
+	<div class="questionaire">
+		<span ng-repeat="template_element in template_container.template_elements" ng-switch="template_element.type">
+			<!-- Open question, onlu contains the question and the answer type -->
+			<span ng-switch-when="open" class="open-question">
+				<label class="question-label">
+					[[#{QUESTION}]]:
+				</label>
+				<br>
+				<textarea ng-model="template_element.question" class="question-box"></textarea>
+				<br>
+				[[#{ANSWER_TYPE}]]:
+				<select ng-model="template_element.answer_type">
+					<!-- TODO : Consider localising -->
+					<option value="text">Text</option>
+					<option value="number">Number</option>
+					<option value="email">Email</option>
+				<select>
+				<br>
+			</span>
+			<!-- Closed question, contains the question and the possible answers -->
+			<span ng-switch-when="closed" class="closed-question">
+				<label class="question-label">
+					[[#{QUESTION}]]:
+				</label>
+				<br>
+				<textarea ng-model="template_element.question" class="question-box"></textarea>
+				<br>
+				<label class="optons-label">
+					[[#{OPTIONS}]]
+				</label>
+				<br>
+				<span ng-repeat="option in template_element.options" class="options-section">
+					<input type="text" ng-model="option.value">
+					<input type="text" ng-model="option.text">
+					<button ng-click="template_container.remove_option(template_element, option)">[[#{REMOVE}]]</button>
+					<br>
+				</span>
+				<button ng-click="template_container.add_option(template_element)">[[#{ADD}]]</button>
+			</span>
+			<span class="preview">
+				<!-- This is for previewing the question -->
+			</span>
+			<br>
+			<button ng-click="template_container.remove_question_element(template_element)">[[#{REMOVE}]]</button>
+			<hr>
+		</span>
+	</div>
 </div>
