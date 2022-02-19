@@ -131,6 +131,25 @@ app.run(function($rootScope, $timeout)
 
 });
 
+// https://stackoverflow.com/questions/38343966/angularjs-case-insensitive-binding-to-a-static-select-drop-down
+app.directive('caseinsensitiveOptions', function() {
+    return {
+      restrict: 'A',
+      require: ['ngModel', 'select'], 
+      link: function(scope, el, attrs, ctrls) {
+        var ngModel = ctrls[0];
+
+        ngModel.$formatters.push(function(value) {
+          var option = [].filter.call(el.children(), function(option) {
+            return option.value.toLowerCase() === value.toLowerCase()
+          })[0]; //find option using case insensitive search.
+
+          return option ? option.value : value
+        });          
+      }
+    }
+  });
+
 /**
  * Controller
  */

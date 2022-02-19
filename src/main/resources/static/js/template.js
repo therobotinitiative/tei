@@ -1,7 +1,8 @@
-app.controller('templateController', function($scope)
+app.controller('templateController', function($scope, $http, $rootScope)
 {
 	$scope.template_container = {
 		template_elements: [],
+		template_id: '',
 		/**
 		 * Add new question into the template.
 		 * @param question_type Question type
@@ -44,6 +45,7 @@ app.controller('templateController', function($scope)
 		create_new_template: function()
 		{
 			$scope.template_container.template_elements = [];
+			$scope.template_container.template_id = '';
 		},
 		/**
 		 * Add new option into question element.
@@ -82,6 +84,28 @@ app.controller('templateController', function($scope)
 		debug: function()
 		{
 			console.log($scope.template_container.template_elements);
+		},
+		/**
+		 * Stores the current template in the server side.
+		 * TODO: Figure out template id
+		 */
+		store: function()
+		{
+			$http.post('/template/store/' + $scope.template_container.template_id, $scope.template_container.template_elements).then(function(response)
+			{
+				$rootScope.information.show('Template stored');
+			});
+		},
+		/**
+		 * Restores the stored template from the server side.
+		 * TODO: Figure out template id
+		 */
+		restore: function()
+		{
+			$http.get('/template/restore/' + $scope.template_container.template_id).then(function(response)
+			{
+				$scope.template_container.template_elements = response.data;
+			});
 		}
 	};
 });
