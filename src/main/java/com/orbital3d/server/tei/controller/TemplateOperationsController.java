@@ -1,13 +1,14 @@
 package com.orbital3d.server.tei.controller;
 
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -137,17 +138,23 @@ public class TemplateOperationsController
 	@Autowired
 	private TemplateService templateService;
 
-	@PostMapping("/template/store/{template_id}")
-	public String storeTemplate(@RequestBody QuestionDTO[] templateElements, @PathVariable("template_id") String templateId)
+	@PostMapping(path = "/template/store/{template_id}", produces =
+	{ MediaType.APPLICATION_JSON_VALUE })
+	public Map<String, String> storeTemplate(@RequestBody QuestionDTO[] templateElements, @PathVariable(name = "template_id", required = true) String templateId)
 	{
-		// If template id is not set generate UUID, id -1 or something similar could be
-		// used to request generated id.
-		if (templateId == null)
+		if (templateId.equalsIgnoreCase("generate"))
 		{
 			templateId = UUID.randomUUID().toString();
 		}
 
+		Template existingTemplate = templateService.findByTemplateId(templateId);
 		Template template = new Template();
+		if (existingTemplate != null)
+		{
+			template.setId(existingTemplate.getId());
+			template.setCreated(existingTemplate.getCreated());
+		}
+
 		template.setTemplateId(templateId);
 		// TODO: Tags, support will be added later
 		Set<QuestionTemplate> templates = new LinkedHashSet<>();
@@ -156,14 +163,14 @@ public class TemplateOperationsController
 			templates.add(QuestionDTO.from(questionDTOto));
 		}
 		template.setQuestionTemplates(templates);
-		template.setCreated(new Date());
 
 		templateService.save(template);
 
-		return templateId;
+		return Map.of("template_id", templateId);
 	}
 
-	@GetMapping("/template/restore/{template_id}")
+	@GetMapping(path = "/template/restore/{template_id}", produces =
+	{ MediaType.APPLICATION_JSON_VALUE })
 	public QuestionDTO[] restoreTemplate(@PathVariable(name = "template_id") String templateId)
 	{
 		Template template = templateService.findByTemplateId(templateId);
@@ -180,7 +187,8 @@ public class TemplateOperationsController
 		return questionsDTOSet.toArray(questionDTOs);
 	}
 
-	@GetMapping("/template/ids")
+	@GetMapping(path = "/template/ids", produces =
+	{ MediaType.APPLICATION_JSON_VALUE })
 	public Set<String> getTemplateIds()
 	{
 		return templateService.findAllTemplateIds();

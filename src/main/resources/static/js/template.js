@@ -91,9 +91,15 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		 */
 		store: function()
 		{
-			$http.post('/template/store/' + $scope.template_container.template_id, $scope.template_container.template_elements).then(function(response)
+			var template_id = $scope.template_container.template_id;
+			// If the id field s empty relace it with "generate" to generate id in the server side.
+			if (template_id === '')
 			{
-				$scope.template_container.template_id = response.data;
+				template_id = 'generate';
+			}
+			$http.post('/template/store/' + template_id, $scope.template_container.template_elements).then(function(response)
+			{
+				$scope.template_container.template_id = response.data.template_id;
 				$rootScope.information.show('Template stored with id ' + $scope.template_container.template_id);
 			});
 		},

@@ -34,6 +34,7 @@ public class Template implements DomainObject
 	public Template()
 	{
 		// Default
+		this.created = new Date();
 	}
 
 	public ObjectId getId()
