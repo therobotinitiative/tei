@@ -93,7 +93,8 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		{
 			$http.post('/template/store/' + $scope.template_container.template_id, $scope.template_container.template_elements).then(function(response)
 			{
-				$rootScope.information.show('Template stored');
+				$scope.template_container.template_id = response.data;
+				$rootScope.information.show('Template stored with id ' + $scope.template_container.template_id);
 			});
 		},
 		/**
