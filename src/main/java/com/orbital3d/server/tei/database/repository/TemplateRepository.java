@@ -9,7 +9,7 @@ import com.orbital3d.server.tei.database.document.template.Template;
 
 public interface TemplateRepository extends CrudRepository<Template, ObjectId>
 {
-	Set<String> findDistinctByTemplateId();
+	Iterable<String> findAllByTemplateId();
 
 	Template findByTemplateId(String templateId);
 

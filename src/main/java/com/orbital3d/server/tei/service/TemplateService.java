@@ -1,5 +1,6 @@
 package com.orbital3d.server.tei.service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.orbital3d.server.tei.database.document.template.Template;
@@ -9,7 +10,14 @@ public interface TemplateService extends CrudService<Template, TemplateRepositor
 {
 	default Set<String> findAllTemplateIds()
 	{
-		return getRepository().findDistinctByTemplateId();
+		// This should be done in better way. Repository method or streams, but it works
+		// now.
+		Set<String> templateIds = new HashSet<>();
+		for (Template template : getRepository().findAll())
+		{
+			templateIds.add(template.getTemplateId());
+		}
+		return templateIds;
 	}
 
 	default Set<Template> findByTags(Set<String> tags)

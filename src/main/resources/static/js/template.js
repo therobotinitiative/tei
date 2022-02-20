@@ -3,6 +3,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 	$scope.template_container = {
 		template_elements: [],
 		template_id: '',
+		available_ids: [],
 		/**
 		 * Add new question into the template.
 		 * @param question_type Question type
@@ -100,6 +101,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 			$http.post('/template/store/' + template_id, $scope.template_container.template_elements).then(function(response)
 			{
 				$scope.template_container.template_id = response.data.template_id;
+				$scope.template_container.available_ids.push(response.data.template_id);
 				$rootScope.information.show('Template stored with id ' + $scope.template_container.template_id);
 			});
 		},
@@ -113,6 +115,18 @@ app.controller('templateController', function($scope, $http, $rootScope)
 			{
 				$scope.template_container.template_elements = response.data;
 			});
-		}
+		},
+		/**
+		 * Rettrives all available ids from the server.
+		 */
+		get_available_ids: function()
+		{
+			$http.get('/template/ids').then(function(response)
+			{
+				$scope.template_container.available_ids = response.data;
+			});
+		},
 	};
+	// Load the available ids
+	$scope.template_container.get_available_ids();
 });

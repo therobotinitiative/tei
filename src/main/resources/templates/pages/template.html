@@ -9,7 +9,11 @@
 		<button ng-click="template_container.debug()">debug</button>
 	</nav>
 	<div class="questionaire">
-		Temlate ID: <input type"text" ng-model="template_container.template_id"><br>
+		Temlate ID: <input type"text" ng-model="template_container.template_id" list="id-list">
+		<datalist id="id-list">
+			<option ng-repeat="template_id in template_container.available_ids" value="{{template_id}}"/>
+		</datalist>
+		<br>
 		<span ng-repeat="template_element in template_container.template_elements" ng-switch="template_element.type.toLowerCase()">
 			<!-- Open question, onlu contains the question and the answer type -->
 			<span ng-switch-when="open" class="open-question">
