@@ -15,6 +15,26 @@
 		</datalist>
 		<br>
 		<span ng-repeat="template_element in template_container.template_elements" ng-switch="template_element.type.toLowerCase()">
+			<hr class="question-splitter">
+			
+			<!-- Preview box -->
+			<span class="preview inline">
+				<span class="question-preview" ng-switch="template_element.type.toLowerCase()">
+					<span ng-switch-when="open" class="open-question-preview">
+						<p ng-bind="template_element.question"></p>
+						<input type="{{template_element.answer_type}}">
+					</span>
+					<span ng-switch-when="closed" class="closed-question-preview">
+						<p ng-bind="template_element.question"></p>
+						<span ng-repeat="option in template_element.options">
+							<input type="radio" value="option.value" name="{{template_element}}" text="{{option.text}}">
+							<label ng-bind="option.text">{{option.text}}</label>
+							<br>
+						</span>
+					</span>
+				</span>
+			</span>
+			
 			<!-- Open question, onlu contains the question and the answer type -->
 			<span ng-switch-when="open" class="open-question">
 				<label class="question-label">
@@ -52,12 +72,8 @@
 				</span>
 				<button ng-click="template_container.add_option(template_element)">[[#{ADD}]]</button>
 			</span>
-			<span class="preview">
-				<!-- This is for previewing the question -->
-			</span>
 			<br>
 			<button ng-click="template_container.remove_question_element(template_element)">[[#{REMOVE}]]</button>
-			<hr>
 		</span>
 	</div>
 </div>

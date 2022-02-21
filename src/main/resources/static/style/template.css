@@ -3,13 +3,19 @@ div.questionaire {
 	background-color: #fdf3df;
 }
 
-div.questionnare span {
+div.questionnaire span {
 line-height: 40px;
+}
+
+hr.question-splitter {
+	margin-top: 6px;
+	margin-bottom: 8px;
 }
 
 .preview {
 	display: inline;
 	float: right;
 	width:50%;
+	height: 100%;
 	background-color: white;
 }
