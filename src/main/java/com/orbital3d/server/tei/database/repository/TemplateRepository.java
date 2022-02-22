@@ -14,4 +14,6 @@ public interface TemplateRepository extends CrudRepository<Template, ObjectId>
 	Template findByTemplateId(String templateId);
 
 	Set<Template> findByTags(Set<String> tags);
+
+	Set<String> findTagsByTemplateId(String templateId);
 }

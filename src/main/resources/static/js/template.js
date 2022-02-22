@@ -4,6 +4,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		template_elements: [],
 		template_id: '',
 		available_ids: [],
+		tags: [],
 		/**
 		 * Add new question into the template.
 		 * @param question_type Question type
@@ -46,6 +47,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		create_new_template: function()
 		{
 			$scope.template_container.template_elements = [];
+			$scope.template_container.tags = [];
 			$scope.template_container.template_id = '';
 		},
 		/**
@@ -88,9 +90,8 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		},
 		/**
 		 * Stores the current template in the server side.
-		 * TODO: Figure out template id
 		 */
-		store: function()
+		store_template: function()
 		{
 			var template_id = $scope.template_container.template_id;
 			// If the id field s empty relace it with "generate" to generate id in the server side.
@@ -101,19 +102,25 @@ app.controller('templateController', function($scope, $http, $rootScope)
 			$http.post('/template/store/' + template_id, $scope.template_container.template_elements).then(function(response)
 			{
 				$scope.template_container.template_id = response.data.template_id;
-				$scope.template_container.available_ids.push(response.data.template_id);
+				if ($scope.template_container.available_ids.indexOf(response.data.template_id) == -1)
+				{
+					$scope.template_container.available_ids.push(response.data.template_id);
+				}
 				$rootScope.information.show('Template stored with id ' + $scope.template_container.template_id);
+				$scope.template_container.save_tags(response.data.template_id);
 			});
 		},
 		/**
 		 * Restores the stored template from the server side.
 		 * TODO: Figure out template id
 		 */
-		restore: function()
+		restore_template: function()
 		{
 			$http.get('/template/restore/' + $scope.template_container.template_id).then(function(response)
 			{
 				$scope.template_container.template_elements = response.data;
+				$scope.template_container.get_tags($scope.template_container.template_id);
+				document.getElementById('tag-to-add').value = '';
 			});
 		},
 		/**
@@ -126,6 +133,51 @@ app.controller('templateController', function($scope, $http, $rootScope)
 				$scope.template_container.available_ids = response.data;
 			});
 		},
+		/**
+		 * Retrieve tags for template id.
+		 * @param temlate_id Template id for which the tags are retrieved
+		 */
+		get_tags: function(template_id)
+		{
+			$http.get('/template/tags/' + template_id).then(function(response)
+			{
+				$scope.template_container.tags = response.data;
+				if (Array.isArray($scope.template_container.tags))
+				{
+					$scope.template_container.tags.sort();
+				}
+			});
+		},
+		/**
+		 * Save tags for template id.
+		 * @param template_id Template id for which the tags are saved for
+		 */
+		save_tags(template_id)
+		{
+			$http.post('/template/tags/' + template_id, $scope.template_container.tags).then(function(response)
+			{
+				$rootScope.information.show('tags saved');
+			});
+		},
+		add_tag: function()
+		{
+			var tags = document.getElementById('tag-to-add').value.split(',');
+			if (!Array.isArray($scope.template_container.tags))
+			{
+				$scope.template_container.tags = [];
+			}
+			for (var i = 0; i < tags.length; i++)
+			{
+				var tag = tags[i].trim();
+				// TODO: Inform if tag exists
+				if ($scope.template_container.tags.indexOf(tag) == -1)
+				{
+					$scope.template_container.tags.push(tag);
+					$scope.template_container.tags.sort();
+					document.getElementById('tag-to-add').value = '';
+				}
+			}
+		}
 	};
 	// Load the available ids
 	$scope.template_container.get_available_ids();

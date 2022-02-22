@@ -138,6 +138,15 @@ public class TemplateOperationsController
 	@Autowired
 	private TemplateService templateService;
 
+	/**
+	 * Store the template elements (questions) with given template id. If the
+	 * template id exists if will be overwritten. If the id is "generate" one will
+	 * be generated for the template.
+	 * 
+	 * @param templateElements Array of {@link QuestionDTO} in the request body
+	 * @param templateId       Template id
+	 * @return The template id used for storing; can be generated
+	 */
 	@PostMapping(path = "/template/store/{template_id}", produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
 	public Map<String, String> storeTemplate(@RequestBody QuestionDTO[] templateElements, @PathVariable(name = "template_id", required = true) String templateId)
@@ -169,6 +178,12 @@ public class TemplateOperationsController
 		return Map.of("template_id", templateId);
 	}
 
+	/**
+	 * Restore template with the given template id.
+	 * 
+	 * @param templateId Template id to identify the template
+	 * @return Array of {@link QuestionDTO}
+	 */
 	@GetMapping(path = "/template/restore/{template_id}", produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
 	public QuestionDTO[] restoreTemplate(@PathVariable(name = "template_id") String templateId)
@@ -187,10 +202,45 @@ public class TemplateOperationsController
 		return questionsDTOSet.toArray(questionDTOs);
 	}
 
+	/**
+	 * Retrieve all available template ids. Will be restricted by group in the
+	 * future.
+	 * 
+	 * @return {@link Set} of available id {@link String}s
+	 */
 	@GetMapping(path = "/template/ids", produces =
 	{ MediaType.APPLICATION_JSON_VALUE })
 	public Set<String> getTemplateIds()
 	{
 		return templateService.findAllTemplateIds();
+	}
+
+	/**
+	 * Retrieve all tags for template id.
+	 * 
+	 * @param templateId Template id which tags to retrieve
+	 * @return {@link Set} of tags or null if no tags present
+	 */
+	@GetMapping(path = "/template/tags/{templateid}", produces =
+	{ MediaType.APPLICATION_JSON_VALUE })
+	public Set<String> getTags(@PathVariable("templateid") String templateId)
+	{
+		return templateService.findTags(templateId);
+	}
+
+	/**
+	 * Store tags for the template. Takes the tags as {@link Set} of tags in the
+	 * request body.
+	 * 
+	 * @param tags       {@link Set} of tags
+	 * @param templateId Template id to identify the template for which the tags are
+	 *                   stored
+	 */
+	@PostMapping("/template/tags/{template_id}")
+	public void storeTags(@RequestBody() Set<String> tags, @PathVariable("template_id") String templateId)
+	{
+		Template template = templateService.findByTemplateId(templateId);
+		template.setTags(tags);
+		templateService.save(template);
 	}
 }

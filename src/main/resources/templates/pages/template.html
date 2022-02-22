@@ -1,19 +1,37 @@
 <div ng-controller="templateController">
 	<h1>[[#{TEMPLATE}]]</h1>
 	<nav class="template-toolbar">
-		<button ng-click="template_container.create_new_template()">[[#{NEW_TEMPLATE}]]</button>
-		<button ng-click="template_container.add_question_element('open')">[[#{OPEN_QUESTION}]]</button>
-		<button ng-click="template_container.add_question_element('closed')">[[#{CLOSED_QUESTION}]]</button>
-		<button ng-click="template_container.store()">Store</button>
-		<button ng-click="template_container.restore()">Restore</button>
-		<button ng-click="template_container.debug()">debug</button>
-	</nav>
-	<div class="questionaire">
+	
 		Temlate ID: <input type"text" ng-model="template_container.template_id" list="id-list">
 		<datalist id="id-list">
 			<option ng-repeat="template_id in template_container.available_ids" value="{{template_id}}"/>
 		</datalist>
+		<button ng-click="template_container.store_template()">Store</button>
+		<button ng-click="template_container.restore_template()">Restore</button>
+
+		<button ng-click="template_container.create_new_template()">[[#{NEW_TEMPLATE}]]</button>
+		<button ng-click="template_container.add_question_element('open')">[[#{OPEN_QUESTION}]]</button>
+		<button ng-click="template_container.add_question_element('closed')">[[#{CLOSED_QUESTION}]]</button>
+		<button ng-click="template_container.debug()">debug</button>
+	</nav>
+	<div class="questionaire">
 		<br>
+		
+		<!-- Tags -->
+		<div class="tags-container">
+			<h2>[[#{TAGS}]]:</h2>
+			<div class="tags">
+				<span class="tag" ng-repeat="tag in template_container.tags">
+					{{tag}}
+				</span>
+			</div>
+			<input type="text" list="tag-list" id="tag-to-add"><button th:text="#{ADD_TAG}" ng-click="template_container.add_tag()">add tag</button>
+			<datalist id="tag-list">
+				<option ng-repeat="tag in template_container.tags" value="{{tag}}"/>
+			</datalist>
+		</div>
+		
+		<!-- questionnare template area -->
 		<span ng-repeat="template_element in template_container.template_elements" ng-switch="template_element.type.toLowerCase()">
 			<hr class="question-splitter">
 			
