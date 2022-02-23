@@ -35,6 +35,13 @@
 		<span ng-repeat="template_element in template_container.template_elements" ng-switch="template_element.type.toLowerCase()">
 			<hr class="question-splitter">
 			
+			<span id="question-index">
+				<h3>{{template_element.index}}</h3>
+				<button ng-click="template_container.move_element_up(template_element)">up</button>
+				<button ng-click="template_container.move_element_down(template_element)">down</button>
+			</span>
+			<br>
+
 			<!-- Preview box -->
 			<span class="preview inline">
 				<span class="question-preview" ng-switch="template_element.type.toLowerCase()">
@@ -86,6 +93,8 @@
 					<input type="text" ng-model="option.value">
 					<input type="text" ng-model="option.text">
 					<button ng-click="template_container.remove_option(template_element, option)">[[#{REMOVE}]]</button>
+					<button ng-click="template_container.option_up(template_element, option)">up</button>
+					<button ng-click="template_container.option_down(template_element, option)">down</button>
 					<br>
 				</span>
 				<button ng-click="template_container.add_option(template_element)">[[#{ADD}]]</button>

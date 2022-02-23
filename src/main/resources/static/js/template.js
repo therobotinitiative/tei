@@ -21,16 +21,28 @@ app.controller('templateController', function($scope, $http, $rootScope)
 					question = $scope.template_container.create_closed_question();
 					break;
 			}
+			// Set the index before pushing the element into array.
+			question.index = $scope.template_container.template_elements.length;
 			$scope.template_container.template_elements.push(question);
 		},
 		/**
-		 * Remove question from the template.
+		 * Remove question from the template and fix the indices.
 		 * @param element Element to remove
 		 */
 		remove_question_element: function(element)
 		{
-			// Seriously? Doesn't javascript have remove funtion?
-			$scope.template_container.template_elements = $scope.template_container.template_elements.filter(array_element => array_element !== element);
+			// Fix the index values, and remove the selected element. Seriously no remove? his is javascript way
+			$scope.template_container.template_elements = $scope.template_container.template_elements.filter(array_element =>
+			{
+				if (array_element !== element)
+				{
+					if (array_element.index > element.index)
+					{
+						array_element.index -= 1;
+					}
+					return array_element;
+				}
+			});
 		},
 		/**
 		 * Remove option from qrustion elements options.
@@ -39,6 +51,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		 */
 		remove_option: function(element, option)
 		{
+			// Fix indices
 			element.options = element.options.filter(array_element => array_element !== option);
 		},
 		/**
@@ -56,7 +69,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		 */
 		add_option: function(element)
 		{
-			var new_option = { 'value': '', 'text' : ''};
+			var new_option = { 'index' : element.options.length, 'value' : '', 'text' : ''};
 			element.options.push(new_option);
 		},
 		/**
@@ -67,7 +80,8 @@ app.controller('templateController', function($scope, $http, $rootScope)
 			return {
 				'type' : 'open',
 				'question' : '',
-				'answer_type' : 'text'
+				'answer_type' : 'text',
+				'index' : '0'
 			};
 		},
 		/**
@@ -78,6 +92,7 @@ app.controller('templateController', function($scope, $http, $rootScope)
 			return {
 				'type' : 'closed',
 				'question' : '',
+				'index' : '0',
 				'options' : []
 			};
 		},
@@ -121,6 +136,16 @@ app.controller('templateController', function($scope, $http, $rootScope)
 				$scope.template_container.template_elements = response.data;
 				$scope.template_container.get_tags($scope.template_container.template_id);
 				document.getElementById('tag-to-add').value = '';
+				// Sort template elements by their index
+				$scope.template_container.template_elements.sort(orderByIndex);
+				// Sort optons by their index
+				for (var i = 0; i < $scope.template_container.template_elements.length; i++)
+				{
+					if ($scope.template_container.template_elements[i].options !== undefined)
+					{
+						$scope.template_container.template_elements[i].options.sort(orderByIndex);
+					}
+				}
 			});
 		},
 		/**
@@ -152,13 +177,19 @@ app.controller('templateController', function($scope, $http, $rootScope)
 		 * Save tags for template id.
 		 * @param template_id Template id for which the tags are saved for
 		 */
-		save_tags(template_id)
+		save_tags(template_id, show_information = false)
 		{
 			$http.post('/template/tags/' + template_id, $scope.template_container.tags).then(function(response)
 			{
-				$rootScope.information.show('tags saved');
+				if (show_information == true && response.status == 200)
+				{
+					$rootScope.information.show('tags saved');
+				}
 			});
 		},
+		/**
+		 * Adds tag to the collection of tags.
+		 */
 		add_tag: function()
 		{
 			var tags = document.getElementById('tag-to-add').value.split(',');
@@ -176,6 +207,81 @@ app.controller('templateController', function($scope, $http, $rootScope)
 					$scope.template_container.tags.sort();
 					document.getElementById('tag-to-add').value = '';
 				}
+			}
+		},
+		/**
+		 * Move the element up in the array. The direction in the function name is from the array index perspective.
+		 *
+		 * @param element Element to move
+		 */
+		move_element_up: function(element)
+		{
+			// Find the elements index in the array
+			var elementIndex = $scope.template_container.template_elements.indexOf(element);
+			var length = $scope.template_container.template_elements.length - 1;
+			if (elementIndex < length)
+			{
+				// Store the elements
+				var currentElement = $scope.template_container.template_elements[elementIndex];
+				var nextElement = $scope.template_container.template_elements[elementIndex + 1];
+				// Swap the index values
+				currentElement.index += 1;
+				nextElement.index -= 1;
+				// Swap the elements in the array
+				$scope.template_container.template_elements[elementIndex + 1] = currentElement;
+				$scope.template_container.template_elements[elementIndex] = nextElement;
+			}
+		},
+		/**
+		 * Move the element down in the array. The direction in the function name is from the array index perspective.
+		 *
+		 * @param element Element to move
+		 */
+		move_element_down: function(element)
+		{
+			// Find the elements index in the array
+			var elementIndex = $scope.template_container.template_elements.indexOf(element);
+			if (elementIndex > 0)
+			{
+				// Store the elements
+				var currentElement = $scope.template_container.template_elements[elementIndex];
+				var previousElement = $scope.template_container.template_elements[elementIndex - 1];
+				// Swap the index values
+				currentElement.index -= 1;
+				previousElement.index += 1;
+				// Swap the elements in the array
+				$scope.template_container.template_elements[elementIndex - 1] = currentElement;
+				$scope.template_container.template_elements[elementIndex] = previousElement;
+			}
+		},
+		option_up: function(element, option)
+		{
+			if (element.options.indexOf(option) < (element.options.length - 1))
+			{
+				var index = element.options.indexOf(option);
+				var currentOption = element.options[index];
+				var nextOption = element.options[index + 1];
+				// Swap indices
+				currentOption.index += 1;
+				nextOption.index -= 1;
+				// Swap options
+				element.options[index] = nextOption;
+				element.options[index + 1] = currentOption;
+			}
+		},
+		option_down: function(element, option)
+		{
+			if (element.options.indexOf(option) > 0)
+			{
+				var index = element.options.indexOf(option);
+				var currentOption = element.options[index];
+				var previousOption = element.options[index - 1];
+				// Swap indices
+				currentOption.index -= 1;
+				previousOption.index += 1;
+				// Swap options
+				element.options[index] = previousOption;
+				element.options[index - 1] = currentOption;
 			}
 		}
 	};

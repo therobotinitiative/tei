@@ -4,24 +4,27 @@ import java.util.Set;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.orbital3d.server.tei.type.template.AnswerType;
 import com.orbital3d.server.tei.type.template.QuestionType;
+import com.orbital3d.server.tei.type.unresolved.IndexedOption;
 
 public final class QuestionTemplate
 {
 	private QuestionType quetionType;
 	private String question;
 	private AnswerType answerType;
-	private Set<Pair<String, String>> options;
+	// private Set<Pair<String, String>> options;
+	private Set<IndexedOption> options;
+	private int index;
 
-	public QuestionTemplate(QuestionType quetionType, String question, AnswerType answerType, Set<Pair<String, String>> options)
+	public QuestionTemplate(QuestionType quetionType, String question, AnswerType answerType, Set<IndexedOption> options, int indexPosition)
 	{
 		this.quetionType = quetionType;
 		this.question = question;
 		this.answerType = answerType;
 		this.options = options;
+		this.index = indexPosition;
 	}
 
 	public QuestionTemplate()
@@ -59,12 +62,22 @@ public final class QuestionTemplate
 		this.answerType = answerType;
 	}
 
-	public Set<Pair<String, String>> getOptions()
+	public Set<IndexedOption> getOptions()
 	{
 		return options;
 	}
 
-	public void setOptions(Set<Pair<String, String>> options)
+	public int getIndex()
+	{
+		return index;
+	}
+
+	public void setIndex(int index)
+	{
+		this.index = index;
+	}
+
+	public void setOptions(Set<IndexedOption> options)
 	{
 		this.options = options;
 	}

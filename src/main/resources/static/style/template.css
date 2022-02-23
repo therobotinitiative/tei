@@ -39,3 +39,7 @@ span.tag {
 	padding: 2px;
 	margin: 4px;
 }
+
+span.question-index h2 {
+	display: inline;
+}

@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +20,7 @@ import com.orbital3d.server.tei.database.document.template.Template;
 import com.orbital3d.server.tei.service.TemplateService;
 import com.orbital3d.server.tei.type.template.AnswerType;
 import com.orbital3d.server.tei.type.template.QuestionType;
+import com.orbital3d.server.tei.type.unresolved.IndexedOption;
 
 @RestController
 public class TemplateOperationsController
@@ -34,6 +34,8 @@ public class TemplateOperationsController
 	 */
 	private static class OptionDTO
 	{
+		@JsonProperty("index")
+		private Integer index;
 		@JsonProperty("value")
 		private String value;
 		@JsonProperty("text")
@@ -44,32 +46,33 @@ public class TemplateOperationsController
 			// Default
 		}
 
-		private OptionDTO(String value, String text)
+		private OptionDTO(Integer index, String value, String text)
 		{
+			this.index = index;
 			this.value = value;
 			this.text = text;
 		}
 
 		/**
-		 * Convert to {@link Pair}.
+		 * Convert to {@link IndexedOption}.
 		 * 
 		 * @param optionDTO Convert from
 		 * @return Converted instance
 		 */
-		private static Pair<String, String> to(OptionDTO optionDTO)
+		private static IndexedOption to(OptionDTO optionDTO)
 		{
-			return Pair.of(optionDTO.value, optionDTO.text);
+			return IndexedOption.of(optionDTO.index, optionDTO.value, optionDTO.text);
 		}
 
 		/**
-		 * Convert from {@link Pair}. This is also a static factory method.
+		 * Convert from {@link IndexedOption}. This is also a static factory method.
 		 * 
-		 * @param optionPair Convert from
+		 * @param indexedOption Convert from
 		 * @return Converted instance
 		 */
-		private static OptionDTO from(Pair<String, String> optionPair)
+		private static OptionDTO from(IndexedOption indexedOption)
 		{
-			return new OptionDTO(optionPair.getLeft(), optionPair.getRight());
+			return new OptionDTO(indexedOption.getIndex(), indexedOption.getValue(), indexedOption.getText());
 		}
 
 	}
@@ -92,6 +95,8 @@ public class TemplateOperationsController
 		private AnswerType answerType;
 		@JsonProperty("options")
 		private Set<OptionDTO> options;
+		@JsonProperty("index")
+		private int index;
 
 		private QuestionDTO()
 		{
@@ -104,10 +109,11 @@ public class TemplateOperationsController
 			questionDTO.type = questionTemplate.getQuetionType();
 			questionDTO.question = questionTemplate.getQuestion();
 			questionDTO.answerType = questionTemplate.getAnswerType();
+			questionDTO.index = questionTemplate.getIndex();
 			// Options are optional
 			if (questionTemplate.getOptions() != null)
 			{
-				for (Pair<String, String> option : questionTemplate.getOptions())
+				for (IndexedOption option : questionTemplate.getOptions())
 				{
 					questionDTO.options.add(OptionDTO.from(option));
 				}
@@ -121,10 +127,11 @@ public class TemplateOperationsController
 			questionTemplate.setAnswerType(questionDTO.answerType);
 			questionTemplate.setQuestion(questionDTO.question);
 			questionTemplate.setQuetionType(questionDTO.type);
+			questionTemplate.setIndex(questionDTO.index);
 			// Options are optional
 			if (questionDTO.options != null)
 			{
-				Set<Pair<String, String>> optionSet = new HashSet<>();
+				Set<IndexedOption> optionSet = new HashSet<>();
 				for (OptionDTO optionDTO : questionDTO.options)
 				{
 					optionSet.add(OptionDTO.to(optionDTO));
@@ -237,7 +244,7 @@ public class TemplateOperationsController
 	 *                   stored
 	 */
 	@PostMapping("/template/tags/{template_id}")
-	public void storeTags(@RequestBody() Set<String> tags, @PathVariable("template_id") String templateId)
+	public void storeTags(@RequestBody(required = false) Set<String> tags, @PathVariable("template_id") String templateId)
 	{
 		Template template = templateService.findByTemplateId(templateId);
 		template.setTags(tags);
