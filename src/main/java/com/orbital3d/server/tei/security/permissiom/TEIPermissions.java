@@ -16,31 +16,60 @@ import org.springframework.stereotype.Component;
 @Component
 public final class TEIPermissions implements SystemPermissions
 {
-	public static final String TEI_INDEX = "tei:index";
-	public static final String TEI_VIEW_DASHBOARD = "tei:dashboard";
-	public static final String TEI_VIEW_VIEW = "tei:view";
-	public static final String TEI_VIEW_TEMPLATE = "tei:templates";
-	public static final String TEI_VIEW_SEND = "tei:send";
-	public static final String ADMINISTRATOR = "tei:administrator";
-	public static final String ADMIN_CREATE_USER = "tei:administrator:createuser";
-	public static final String ADMIN_UPDATE_USE_PASSWORD = "tei:administrator:updateuserpassword";
-	public static final String ADMIN_USER_PERMISSIONS = "tei:administrator:permissions";
-	public static final String ADMIN_USER_DELETE = "tei:administrator:deleteuser";
-	public static final String ADMIN_USERDATA_UPDATE = "tei:administrator:userdataupdate";
+	public static final class Dashboard
+	{
+		public static final String VIEW = "tei:dashboard:view";
+	}
+
+	public static final class View
+	{
+		public static final String VIEW = "tei:view:view";
+	}
+
+	public static final class Send
+	{
+		public static final String VIEW = "tei:send:view";
+	}
+
+	public static final class Templates
+	{
+		public static final String VIEW = "tei:template:view";
+		public static final String STORE = "tei:template:store";
+		public static final String RESTORE = "tei:template:restore";
+		public static final String IDS = "tei:template:ids";
+		public static final String STORE_TAGS = "tei:template:store-tags";
+		public static final String TAGS = "tei:template:tags";
+	}
+
+	public static final class Administrator
+	{
+		public static final String VIEW = "tei:administrator:view";
+		public static final String CREATE_USER = "tei:administrator:create-user";
+		public static final String GET_USER = "tei:administrator:get-user";
+		public static final String UPDATE_USER_PASSWORD = "tei:administrator:update-user-password";
+		public static final String USER_PERMISSIONS = "tei:administrator:user-permissions";
+		public static final String DELETE_USER = "tei:administrator:delete-user";
+		public static final String UPDATE_USER_DATA = "tei:administrator:update-user-data";
+		public static final String UPDATE_USER_PERMISSIONS = "tei:administrator:update-user-permissions";
+		public static final String PERMISSIONS = "tei:administrator:permissions";
+	}
 
 	@Override
 	public Set<String> allPermissions() throws IllegalArgumentException, IllegalAccessException
 	{
 		Set<String> permissions = new HashSet<>();
-		for (Field field : this.getClass().getFields())
+		for (Class<?> c : this.getClass().getClasses())
 		{
-			// Only get the static fibal fields
-			if ((field.getModifiers() & Modifier.STATIC) != 0 && (field.getModifiers() & Modifier.FINAL) != 0)
+			for (Field field : c.getFields())
 			{
-				Object object = field.get(this);
-				if (object.getClass().isAssignableFrom(String.class))
+				// Only get the static final fields
+				if ((field.getModifiers() & Modifier.STATIC) != 0 && (field.getModifiers() & Modifier.FINAL) != 0)
 				{
-					permissions.add((String) object);
+					Object object = field.get(this);
+					if (object.getClass().isAssignableFrom(String.class))
+					{
+						permissions.add((String) object);
+					}
 				}
 			}
 		}

@@ -81,7 +81,7 @@ public class UserDataController
 	 * @param newUserData User data to update into
 	 */
 	@PutMapping("/admin/userdata/{username}")
-	@RequiresPermissions(TEIPermissions.ADMIN_USERDATA_UPDATE)
+	@RequiresPermissions(TEIPermissions.Administrator.UPDATE_USER_DATA)
 	public void updateUserData(@PathVariable("username") String userName, @RequestBody UserDataControllerDTO newUserData)
 	{
 		User uaer = userService.findUser(userName);

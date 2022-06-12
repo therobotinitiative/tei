@@ -6,6 +6,8 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.orbital3d.server.tei.database.document.Permissions;
@@ -20,6 +23,7 @@ import com.orbital3d.server.tei.database.document.User;
 import com.orbital3d.server.tei.database.repository.PermissionsRepository;
 import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 import com.orbital3d.server.tei.service.PasswordService;
+import com.orbital3d.server.tei.service.PermissionsService;
 import com.orbital3d.server.tei.service.UserService;
 
 /**
@@ -32,6 +36,8 @@ import com.orbital3d.server.tei.service.UserService;
 @RestController
 public class UserController
 {
+	private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
+
 	@Autowired
 	private UserService userService;
 
@@ -40,6 +46,9 @@ public class UserController
 
 	@Autowired
 	private PermissionsRepository permissionRepository;
+
+	@Autowired
+	private PermissionsService permissionsService;
 
 	/**
 	 * Get user or all users. User can be retrieved with user name, but if the user
@@ -52,10 +61,8 @@ public class UserController
 	 * @param userName User name to getM optional
 	 * @return {@link User} as {@link List} n JSON format
 	 */
-	@GetMapping(path =
-	{ "/admin/user", "/admin/user/{username}" }, produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
-	@RequiresPermissions(TEIPermissions.ADMINISTRATOR)
+	@GetMapping(path = { "/admin/user", "/admin/user/{username}" }, produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Administrator.GET_USER)
 	public List<User> getUser(@PathVariable(name = "username", required = false) String userName)
 	{
 		List<User> user = null;
@@ -82,9 +89,8 @@ public class UserController
 	 * @return Newly created {@link User} as JSON
 	 * @throws IllegalStateException If user with the user name already exists
 	 */
-	@PostMapping(path = "/admin/users/{username}", produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
-	// @RequiresPermissions(SystemPermissions.ADMIN_CREATE_USER)
+	@PostMapping(path = "/admin/users/{username}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Administrator.CREATE_USER)
 	public User creeateUser(@PathVariable("username") String userName)
 	{
 		if (userService.exists(userName))
@@ -109,7 +115,7 @@ public class UserController
 	 * @param password New password
 	 */
 	@PutMapping("/admin/users/{username}/{password}")
-	// @RequiresPermissions(SystemPermissions.ADMIN_UPDATE_USE_PASSWORD)
+	@RequiresPermissions(TEIPermissions.Administrator.UPDATE_USER_PASSWORD)
 	public void updateUPassword(@PathVariable("username") String userName, @PathVariable("password") String password)
 	{
 		User user = userService.findUser(userName);
@@ -128,7 +134,7 @@ public class UserController
 	 * @return {@link Set} of user permissions
 	 */
 	@GetMapping("/admin/user/permissions/{username}")
-//	@RequiresPermissions(TEIPermissions.ADMIN_USER_PERMISSIONS)
+	@RequiresPermissions(TEIPermissions.Administrator.USER_PERMISSIONS)
 	public Set<String> getUserPermissions(@PathVariable("username") String userName)
 	{
 		Permissions permissions = permissionRepository.findByUser(userService.findUser(userName));
@@ -137,6 +143,23 @@ public class UserController
 			return permissions.getPermissions();
 		}
 		return null;
+	}
+
+	@PutMapping(path = "/admin/perm/{username}", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequiresPermissions(TEIPermissions.Administrator.UPDATE_USER_PERMISSIONS)
+	public void updateUserPermissions(@PathVariable(name = "username", required = true) String userName, @RequestBody Set<String> permissions)
+	{
+		LOG.trace("Updating permissions for {}", userName);
+
+		User user = userService.findUser(userName);
+		Permissions userPermissions = permissionsService.findByUser(user);
+		if (userPermissions == null)
+		{
+			userPermissions = new Permissions();
+			userPermissions.setUser(user);
+		}
+		userPermissions.setPermissions(permissions);
+		permissionsService.save(userPermissions);
 	}
 
 	/**
@@ -150,6 +173,7 @@ public class UserController
 	 * @param userName User name to delete
 	 */
 	@DeleteMapping("/admin/user/{username}")
+	@RequiresPermissions(TEIPermissions.Administrator.DELETE_USER)
 	public void delete(@PathVariable("username") String userName)
 	{
 		User user = userService.findUser(userName);

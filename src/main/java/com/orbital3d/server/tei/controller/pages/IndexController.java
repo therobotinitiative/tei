@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +25,7 @@ import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 public class IndexController
 {
 	/**
-	 * Inner class for popylating menu tems.
+	 * Inner class for populating menu items.
 	 * 
 	 * @author msiren
 	 *
@@ -62,9 +61,9 @@ public class IndexController
 		/**
 		 * Static factory method.
 		 * 
-		 * @param url
-		 * @param localisationKey
-		 * @param permission      Strng permission
+		 * @param url             Path for the menu item
+		 * @param localisationKey Localisation key for the menu item
+		 * @param permission      Required permission
 		 * @return New instance
 		 */
 		public static MenuContainer of(String url, LocalisationKeys localisationKey, String permission)
@@ -78,18 +77,17 @@ public class IndexController
 	 * @param model
 	 * @return Index page template name
 	 */
-	@RequiresPermissions(TEIPermissions.TEI_INDEX)
 	@GetMapping("/tei")
 	public String index(Model model)
 	{
 		Map<String, LocalisationKeys> menu = new LinkedHashMap<>();
 		Set<MenuContainer> menuItems = new LinkedHashSet<>();
 
-		menuItems.add(MenuContainer.of("#!/dashboard", LocalisationKeys.DASHBOARD, TEIPermissions.TEI_VIEW_DASHBOARD));
-		menuItems.add(MenuContainer.of("#!/view", LocalisationKeys.VIEW, TEIPermissions.TEI_VIEW_VIEW));
-		menuItems.add(MenuContainer.of("#!/send", LocalisationKeys.SEND, TEIPermissions.TEI_VIEW_SEND));
-		menuItems.add(MenuContainer.of("#!/template", LocalisationKeys.TEMPLATE, TEIPermissions.TEI_VIEW_TEMPLATE));
-		menuItems.add(MenuContainer.of("#!/admin", LocalisationKeys.ADMINISTRATOR, TEIPermissions.ADMINISTRATOR));
+		menuItems.add(MenuContainer.of("#!/dashboard", LocalisationKeys.DASHBOARD, TEIPermissions.Dashboard.VIEW));
+		menuItems.add(MenuContainer.of("#!/view", LocalisationKeys.VIEW, TEIPermissions.View.VIEW));
+		menuItems.add(MenuContainer.of("#!/send", LocalisationKeys.SEND, TEIPermissions.Send.VIEW));
+		menuItems.add(MenuContainer.of("#!/template", LocalisationKeys.TEMPLATE, TEIPermissions.Templates.VIEW));
+		menuItems.add(MenuContainer.of("#!/admin", LocalisationKeys.ADMINISTRATOR, TEIPermissions.Administrator.VIEW));
 		menuItems.add(MenuContainer.of("/logout", LocalisationKeys.LOGOUT, ""));
 
 		Subject subject = SecurityUtils.getSubject();

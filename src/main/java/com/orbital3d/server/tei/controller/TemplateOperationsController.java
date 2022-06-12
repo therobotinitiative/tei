@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orbital3d.server.tei.database.document.template.QuestionTemplate;
 import com.orbital3d.server.tei.database.document.template.Template;
+import com.orbital3d.server.tei.security.permissiom.TEIPermissions;
 import com.orbital3d.server.tei.service.TemplateService;
 import com.orbital3d.server.tei.type.template.AnswerType;
 import com.orbital3d.server.tei.type.template.QuestionType;
@@ -154,8 +156,8 @@ public class TemplateOperationsController
 	 * @param templateId       Template id
 	 * @return The template id used for storing; can be generated
 	 */
-	@PostMapping(path = "/template/store/{template_id}", produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
+	@PostMapping(path = "/template/store/{template_id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Templates.STORE)
 	public Map<String, String> storeTemplate(@RequestBody QuestionDTO[] templateElements, @PathVariable(name = "template_id", required = true) String templateId)
 	{
 		if (templateId.equalsIgnoreCase("generate"))
@@ -191,8 +193,8 @@ public class TemplateOperationsController
 	 * @param templateId Template id to identify the template
 	 * @return Array of {@link QuestionDTO}
 	 */
-	@GetMapping(path = "/template/restore/{template_id}", produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(path = "/template/restore/{template_id}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Templates.RESTORE)
 	public QuestionDTO[] restoreTemplate(@PathVariable(name = "template_id") String templateId)
 	{
 		Template template = templateService.findByTemplateId(templateId);
@@ -215,8 +217,8 @@ public class TemplateOperationsController
 	 * 
 	 * @return {@link Set} of available id {@link String}s
 	 */
-	@GetMapping(path = "/template/ids", produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(path = "/template/ids", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Templates.IDS)
 	public Set<String> getTemplateIds()
 	{
 		return templateService.findAllTemplateIds();
@@ -228,8 +230,8 @@ public class TemplateOperationsController
 	 * @param templateId Template id which tags to retrieve
 	 * @return {@link Set} of tags or null if no tags present
 	 */
-	@GetMapping(path = "/template/tags/{templateid}", produces =
-	{ MediaType.APPLICATION_JSON_VALUE })
+	@GetMapping(path = "/template/tags/{templateid}", produces = { MediaType.APPLICATION_JSON_VALUE })
+	@RequiresPermissions(TEIPermissions.Templates.TAGS)
 	public Set<String> getTags(@PathVariable("templateid") String templateId)
 	{
 		return templateService.findTags(templateId);
@@ -244,6 +246,7 @@ public class TemplateOperationsController
 	 *                   stored
 	 */
 	@PostMapping("/template/tags/{template_id}")
+	@RequiresPermissions(TEIPermissions.Templates.STORE_TAGS)
 	public void storeTags(@RequestBody(required = false) Set<String> tags, @PathVariable("template_id") String templateId)
 	{
 		Template template = templateService.findByTemplateId(templateId);
