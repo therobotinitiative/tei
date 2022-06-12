@@ -15,8 +15,7 @@ public class ErrorController
 	/**
 	 * 403 Forbidden error page.
 	 */
-	@GetMapping(path =
-	{ "/403" })
+	@GetMapping(path = { "/403" })
 	public String noPermission()
 	{
 		return "error/403";
@@ -26,7 +25,7 @@ public class ErrorController
 	 * 404 Not found error page.
 	 */
 	@GetMapping("/404")
-	public String noyFound()
+	public String notFound()
 	{
 		return "error/404";
 	}

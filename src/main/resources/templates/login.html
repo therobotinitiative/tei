@@ -4,7 +4,7 @@
 	<title>Login to TEI</title>
 </head>
 <body>
-<span th:text="${unauth}">&nbsp;</span>
+<span th:text="${unauth}" style="background-color: red;">&nbsp;</span>
 	<form action="/login" method="POST">
 		Login to TEI:<br>
 		<input type="hidden" name="token" th:value="${token}">

@@ -115,7 +115,8 @@ public class SecurityConfiguration
 
 		// all other paths require a logged in user or uses annotations, need to figure
 		// out how to protect resource paths as needed!
-		chainDefinition.addPathDefinition("/**", "anon");
+		chainDefinition.addPathDefinition("/login**", "anon");
+		chainDefinition.addPathDefinition("/**", "authc");
 		return chainDefinition;
 	}
 

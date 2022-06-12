@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.orbital3d.server.tei.database.document.User;
-import com.orbital3d.server.tei.error.AuthenticationFailedExcetion;
 import com.orbital3d.server.tei.service.PasswordService;
 import com.orbital3d.server.tei.service.UserService;
 
@@ -80,9 +80,8 @@ public class AuthenticationController
 			SecurityUtils.getSubject().login(new UsernamePasswordToken(userName, password.toCharArray()));
 			LOG.info("{} user logged in with token {}", user.getUserName(), token);
 			return "redirect:/tei#!/dashboard";
-//			}
 		}
-		throw new AuthenticationFailedExcetion();
+		throw new AuthenticationException();
 	}
 
 	/**
@@ -95,6 +94,7 @@ public class AuthenticationController
 	public String logout(HttpServletRequest request)
 	{
 		LOG.info("User logged out");
+		SecurityUtils.getSubject().logout();
 		return "redirect:login";
 	}
 }
